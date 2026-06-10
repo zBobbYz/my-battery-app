@@ -1,0 +1,16 @@
+{
+  "name": "ระบบจัดการร้านแบตเตอรี่ PWA",
+  "short_name": "BatteryPro",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f7fafc",
+  "theme_color": "#2d3748",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3106/3106373.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
