@@ -7,51 +7,43 @@
     <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', sans-serif; background-color: #f7fafc; margin: 0; padding: 0; color: #2d3748; -webkit-user-select: none; }
-        
-        /* เมนูแท็บอยู่บนสุดทันที */
         .tabs { display: flex; background: #2d3748; overflow-x: auto; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .tab-btn { flex: 1; padding: 18px 10px; color: #a0aec0; border: none; background: none; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; white-space: nowrap; touch-action: manipulation; }
         .tab-btn.active { color: white; background: #1a202c; border-bottom: 4px solid #3182ce; }
-        
         .container { padding: 15px; padding-bottom: 60px; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
+        .tab-content { display: none; } .tab-content.active { display: block; }
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
         h2 { font-size: 18px; margin-top: 0; margin-bottom: 15px; border-bottom: 2px solid #edf2f7; padding-bottom: 8px; color: #2b6cb0; }
-        
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 15px; color: #4a5568; }
-        
-        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 16px; background-color: #fff; touch-action: manipulation; }
-        
-        .flex-group { display: flex; gap: 10px; }
-        .flex-group .form-group { flex: 1; }
-        
+        .form-group { margin-bottom: 15px; } label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 15px; color: #4a5568; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; font-size: 16px; touch-action: manipulation; }
+        .flex-group { display: flex; gap: 10px; } .flex-group .form-group { flex: 1; }
         button.btn-primary { background: #3182ce; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; width: 100%; cursor: pointer; touch-action: manipulation; }
         button.btn-primary:active { background: #2b6cb0; }
-        
-        /* ปุ่มด่วนต่างๆ และป้องกัน Double-tap zoom บนหน้าจอสัมผัส */
         .btn-quick-add { background: #31bc86; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap; touch-action: manipulation; }
         .btn-quick-add:active { background: #27966b; }
-        
         .toggle-container { display: flex; align-items: center; justify-content: space-between; background: #edf2f7; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
-        .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 28px; } .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .3s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider { background-color: #48bb78; }
-        input:checked + .slider:before { transform: translateX(22px); }
-
+        input:checked + .slider { background-color: #48bb78; } input:checked + .slider:before { transform: translateX(22px); }
         .summary-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 20px; }
         .stat-box { padding: 15px; border-radius: 10px; color: white; text-align: center; }
         .bg-green { background: #48bb78; } .bg-red { background: #f56565; } .bg-blue { background: #4299e1; }
         .stat-val { font-size: 24px; font-weight: bold; margin-top: 5px; }
-
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; background: white; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 14px 10px; text-align: left; border-bottom: 1px solid #edf2f7; vertical-align: middle; }
-        th { background-color: #edf2f7; color: #4a5568; font-weight: bold; }
+        th, td { padding: 14px 10px; text-align: left; border-bottom: 1px solid #edf2f7; vertical-align: middle; } th { background-color: #edf2f7; color: #4a5568; font-weight: bold; }
         .text-right { text-align: right; }
+        .size-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 5px; }
+        .size-btn { background-color: #edf2f7; color: #4a5568; border: 2px solid transparent; padding: 14px 5px; border-radius: 8px; font-size: 15px; font-weight: bold; text-align: center; cursor: pointer; transition: all 0.2s ease; touch-action: manipulation; }
+        .size-btn:active { transform: scale(0.95); } .size-btn.active { background-color: #ebf8ff; border-color: #3182ce; color: #2b6cb0; box-shadow: 0 2px 4px rgba(49, 130, 206, 0.2); }
+        
+        /* สไตล์สำหรับปุ่มเลือกรุ่นแบตเตอรี่ */
+        .model-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; max-height: 320px; overflow-y: auto; padding-right: 5px; }
+        .model-btn { background: white; border: 2px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: left; cursor: pointer; transition: 0.2s; touch-action: manipulation; display: flex; flex-direction: column; justify-content: center; }
+        .model-btn:active { transform: scale(0.98); }
+        .model-btn.active { border-color: #3182ce; background: #ebf8ff; box-shadow: 0 2px 4px rgba(49,130,206,0.1); }
+        .m-brand { font-size: 12px; color: #718096; }
+        .m-name { font-size: 14px; font-weight: bold; color: #2d3748; margin-top: 2px; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
 </head>
@@ -69,884 +61,326 @@
     <div id="sale-tab" class="tab-content active">
         <div class="card">
             <h2>รายการขาย</h2>
-            
             <div class="form-group">
                 <label>⚡ เลือกขนาดแบตเตอรี่:</label>
-                <select id="sizeFilter" onchange="filterProducts()">
-                    <option value="ALL">-- แสดงทั้งหมดทุกขนาด --</option>
-                    <option value="D31">D31</option>
-                    <option value="LN4">LN4</option>
-                    <option value="D26">D26</option>
-                    <option value="LN3">LN3</option>
-                    <option value="LN2">LN2</option>
-                    <option value="B24">B24</option>
-                    <option value="B19">B19</option>
-                    <option value="A19">A19</option>
-                </select>
+                <div class="size-grid" id="sizeGrid">
+                    <button type="button" class="size-btn active" data-size="ALL" onclick="selectSize('ALL')">ทั้งหมด</button>
+                    <button type="button" class="size-btn" data-size="D31" onclick="selectSize('D31')">D31</button>
+                    <button type="button" class="size-btn" data-size="LN4" onclick="selectSize('LN4')">LN4</button>
+                    <button type="button" class="size-btn" data-size="D26" onclick="selectSize('D26')">D26</button>
+                    <button type="button" class="size-btn" data-size="LN3" onclick="selectSize('LN3')">LN3</button>
+                    <button type="button" class="size-btn" data-size="LN2" onclick="selectSize('LN2')">LN2</button>
+                    <button type="button" class="size-btn" data-size="B24" onclick="selectSize('B24')">B24</button>
+                    <button type="button" class="size-btn" data-size="B19" onclick="selectSize('B19')">B19</button>
+                    <button type="button" class="size-btn" data-size="A19" onclick="selectSize('A19')">A19</button>
+                </div>
+                <input type="hidden" id="sizeFilter" value="ALL">
             </div>
             
-            <div class="form-group">
-                <label>🔍 ค้นหาและเลือกรุ่นแบตเตอรี่:</label>
-                <input type="text" list="saleProductList" id="saleSearchInput" placeholder="พิมพ์ชื่อรุ่น, แบรนด์ หรือรหัส (เช่น YUASA, LN3)..." oninput="handleProductSelection()">
+            <div class="form-group" style="background: #edf2f7; padding: 15px; border-radius: 8px;">
+                <label>🔍 เลือกรุ่นแบตเตอรี่ที่ต้องการขาย:</label>
+                <input type="text" list="saleProductList" id="saleSearchInput" placeholder="พิมพ์ค้นหา หรือกดเลือกจากตารางด้านล่าง..." oninput="handleSearchInput(this.value)">
                 <datalist id="saleProductList"></datalist>
                 <input type="hidden" id="saleProduct">
+                <div class="model-grid" id="modelGrid"></div>
             </div>
-            
+
             <div class="flex-group">
-                <div class="form-group">
-                    <label>จำนวน (ลูก):</label>
-                    <input type="number" id="saleQty" value="1" min="1" oninput="calculateTotal()">
-                </div>
-                <div class="form-group">
-                    <label>ราคาขาย (บาท):</label>
-                    <input type="number" id="salePriceEach" readonly style="background:#edf2f7;">
-                </div>
+                <div class="form-group"><label>จำนวน (ลูก):</label><input type="number" id="saleQty" value="1" min="1" oninput="calculateTotal()"></div>
+                <div class="form-group"><label>ราคาขาย (บาท):</label><input type="number" id="salePriceEach" readonly style="background:#edf2f7;"></div>
             </div>
-
-            <div class="toggle-container">
-                <span style="font-weight: bold; font-size: 15px;">🔌 มีแบตเตอรี่เก่ามาเทิร์น</span>
-                <label class="switch">
-                    <input type="checkbox" id="hasTradeIn" onchange="toggleTradeInSection()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-
-            <div id="tradeInSection" style="display: none; background: #f7fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #cbd5e0;">
-                <div class="form-group">
-                    <label>ขนาดแบตเตอรี่เก่า:</label>
-                    <select id="tradeInType" onchange="updateTradeInSizeOptions()">
-                        <option value="same">เทิร์นขนาดเดียวกับแบตใหม่</option>
-                        <option value="other">เทิร์นขนาดอื่นๆ</option>
-                    </select>
+            <div class="toggle-container"><span style="font-weight:bold; font-size:15px;">🔌 มีแบตเตอรี่เก่ามาเทิร์น</span><label class="switch"><input type="checkbox" id="hasTradeIn" onchange="toggleTradeInSection()"><span class="slider"></span></label></div>
+            <div id="tradeInSection" style="display:none; background:#f7fafc; padding:15px; border-radius:8px; margin-bottom:15px; border:1px dashed #cbd5e0;">
+                <div class="form-group"><label>ขนาดแบตเตอรี่เก่า:</label><select id="tradeInType" onchange="updateTradeInSizeOptions()"><option value="same">เทิร์นขนาดเดียวกับแบตใหม่</option><option value="other">เทิร์นขนาดอื่นๆ</option></select></div>
+                <div id="otherSizeDiv" style="display:none;" class="form-group"><label>เลือกขนาดแบตเก่าที่นำมาเทิร์น:</label>
+                    <select id="saleScrapCategory" onchange="updateScrapDiscount()"><option value="D31">D31</option><option value="LN4">LN4</option><option value="D26">D26</option><option value="LN3">LN3</option><option value="LN2">LN2</option><option value="B24">B24</option><option value="B19">B19</option><option value="A19">A19</option></select>
                 </div>
-                
-                <div id="otherSizeDiv" style="display: none;" class="form-group">
-                    <label>เลือกขนาดแบตเก่าที่นำมาเทิร์น:</label>
-                    <select id="saleScrapCategory" onchange="updateScrapDiscount()">
-                        <option value="D31">D31</option>
-                        <option value="LN4">LN4</option>
-                        <option value="D26">D26</option>
-                        <option value="LN3">LN3</option>
-                        <option value="LN2">LN2</option>
-                        <option value="B24">B24</option>
-                        <option value="B19">B19</option>
-                        <option value="A19">A19</option>
-                    </select>
-                </div>
-                
                 <div class="flex-group">
-                    <div class="form-group">
-                        <label>จำนวน (ลูก):</label>
-                        <input type="number" id="saleScrapQty" value="1" min="1" oninput="calculateTotal()">
-                    </div>
-                    <div class="form-group">
-                        <label>ส่วนลดเทิร์น/ลูก (บาท):</label>
-                        <input type="number" id="saleScrapDiscount" oninput="calculateTotal()">
-                    </div>
+                    <div class="form-group"><label>จำนวน (ลูก):</label><input type="number" id="saleScrapQty" value="1" min="1" oninput="calculateTotal()"></div>
+                    <div class="form-group"><label>ส่วนลดเทิร์น/ลูก (บาท):</label><input type="number" id="saleScrapDiscount" oninput="calculateTotal()"></div>
                 </div>
             </div>
-
-            <div class="form-group" style="background: #ebf8ff; padding: 15px; border-radius: 8px; text-align: center;">
-                <span style="font-size: 14px; color: #2b6cb0; font-weight: bold;">ราคาสุทธิ</span>
-                <div style="font-size: 32px; font-weight: bold; color: #2b6cb0;" id="totalNetText">0 ฿</div>
-            </div>
-
+            <div class="form-group" style="background:#ebf8ff; padding:15px; border-radius:8px; text-align:center;"><span style="font-size:14px; color:#2b6cb0; font-weight:bold;">ราคาสุทธิ</span><div style="font-size:32px; font-weight:bold; color:#2b6cb0;" id="totalNetText">0 ฿</div></div>
             <button class="btn-primary" onclick="processSale()">บันทึกการขาย</button>
         </div>
     </div>
 
-    <div id="stock-tab" class="tab-content">
-        <div class="card" style="overflow-x: auto;">
-            <h2>📦 รายการสต็อกแบตเตอรี่ใหม่</h2>
-            <table id="newStockTable"></table>
-            <button id="editInvBtn" class="btn-primary" style="background:#4a5568; margin-top:20px;" onclick="handleInventoryEditClick()">🔧 แก้ไขสต็อก ราคาทุน และราคาขาย</button>
-        </div>
-    </div>
-
-    <div id="scrap-tab" class="tab-content">
-        <div class="card" style="overflow-x: auto;">
-            <h2>🔋 จำนวนและส่วนลดเทิร์นแบตเตอรี่เก่า</h2>
-            <table id="oldStockTable"></table>
-            <button id="editScrapBtn" class="btn-primary" style="background:#4a5568; margin-top:20px;" onclick="handleScrapInventoryEditClick()">🔧 แก้ไขจำนวนและส่วนลด</button>
-        </div>
-    </div>
-
+    <div id="stock-tab" class="tab-content"><div class="card" style="overflow-x:auto;"><h2>📦 รายการสต็อกแบตเตอรี่ใหม่</h2><table id="newStockTable"></table><button id="editInvBtn" class="btn-primary" style="background:#4a5568; margin-top:20px;" onclick="handleInventoryEditClick()">🔧 แก้ไขสต็อก ราคาทุน และราคาขาย</button></div></div>
+    <div id="scrap-tab" class="tab-content"><div class="card" style="overflow-x:auto;"><h2>🔋 จำนวนและส่วนลดเทิร์นแบตเตอรี่เก่า</h2><table id="oldStockTable"></table><button id="editScrapBtn" class="btn-primary" style="background:#4a5568; margin-top:20px;" onclick="handleScrapInventoryEditClick()">🔧 แก้ไขจำนวนและส่วนลด</button></div></div>
+    
     <div id="report-tab" class="tab-content">
-        <div class="card">
-            <h2>ช่วงเวลาคัดกรองรายงาน</h2>
-            <div class="flex-group">
-                <div class="form-group">
-                    <label>เดือน:</label>
-                    <select id="reportMonth" onchange="loadDashboard()">
-                        <option value="01">มกราคม</option><option value="02">กุมภาพันธ์</option>
-                        <option value="03">มีนาคม</option><option value="04">เมษายน</option>
-                        <option value="05">พฤษภาคม</option><option value="06">มิถุนายน</option>
-                        <option value="07">กรกฎาคม</option><option value="08">สิงหาคม</option>
-                        <option value="09">กันยายน</option><option value="10">ตุลาคม</option>
-                        <option value="11">พฤศจิกายน</option><option value="12">ธันวาคม</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>ปี (พ.ศ.):</label>
-                    <select id="reportYear" onchange="loadDashboard()"></select>
-                </div>
-            </div>
-        </div>
-
-        <div class="summary-grid">
-            <div class="stat-box bg-green"><div>ยอดขายรวมประจำเดือน</div><div class="stat-val" id="repIncome">0 ฿</div></div>
-            <div class="stat-box bg-red"><div>รายจ่ายรวม (ซื้อของเติมสต็อก)</div><div class="stat-val" id="repExpense">0 ฿</div></div>
-            <div class="stat-box bg-blue"><div>กำไรสุทธิประจำเดือน</div><div class="stat-val" id="repProfit">0 ฿</div></div>
-        </div>
-
-        <div class="card">
-            <h2>🏆 5 อันดับรุ่นแบตเตอรี่ใหม่ที่ขายดีที่สุด</h2>
-            <table id="bestSellerTable"></table>
-        </div>
-        
-        <div class="card">
-            <h2>📝 ประวัติการเดินบัญชีเดือนนี้</h2>
-            <table id="txTable"></table>
-        </div>
+        <div class="card"><h2>ช่วงเวลาคัดกรองรายงาน</h2><div class="flex-group"><div class="form-group"><label>เดือน:</label><select id="reportMonth" onchange="loadDashboard()"><option value="01">มกราคม</option><option value="02">กุมภาพันธ์</option><option value="03">มีนาคม</option><option value="04">เมษายน</option><option value="05">พฤษภาคม</option><option value="06">มิถุนายน</option><option value="07">กรกฎาคม</option><option value="08">สิงหาคม</option><option value="09">กันยายน</option><option value="10">ตุลาคม</option><option value="11">พฤศจิกายน</option><option value="12">ธันวาคม</option></select></div><div class="form-group"><label>ปี (พ.ศ.):</label><select id="reportYear" onchange="loadDashboard()"></select></div></div></div>
+        <div class="summary-grid"><div class="stat-box bg-green"><div>ยอดขายรวมประจำเดือน</div><div class="stat-val" id="repIncome">0 ฿</div></div><div class="stat-box bg-red"><div>รายจ่ายรวม (ซื้อของเติมสต็อก)</div><div class="stat-val" id="repExpense">0 ฿</div></div><div class="stat-box bg-blue"><div>กำไรสุทธิประจำเดือน</div><div class="stat-val" id="repProfit">0 ฿</div></div></div>
+        <div class="card"><h2>🏆 5 อันดับรุ่นแบตเตอรี่ใหม่ที่ขายดีที่สุด</h2><table id="bestSellerTable"></table></div><div class="card"><h2>📝 ประวัติการเดินบัญชีเดือนนี้</h2><table id="txTable"></table></div>
     </div>
 
-    <div id="sys-tab" class="tab-content">
-        <div class="card">
-            <h2>จัดการฐานข้อมูลสำรองดิบ (.db)</h2>
-            <p style="font-size:14px; color:#718096; line-height:1.5;">ข้อมูลทั้งหมดถูกบันทึกในรูปแบบไฟล์ SQLite ภายในเบราว์เซอร์เครื่อง iPad นี้อย่างปลอดภัยด้วย IndexedDB รองรับข้อมูลขนาดใหญ่ได้ไม่จำกัด แนะนำให้หมั่นดาวน์โหลดสำรองข้อมูลเก็บไว้แยกต่างหาก</p>
-            <button class="btn-primary" style="background:#48bb78; margin-bottom:20px;" onclick="exportDatabase()">📤 ส่งออกไฟล์ฐานข้อมูล (Export .db)</button>
-            
-            <button class="btn-primary" style="background:#e53e3e; margin-bottom:20px;" onclick="resetDatabase()">🗑️ รีเซ็ตระบบ (ล้างข้อมูลและโหลด 23 รุ่นใหม่จากโค้ด)</button>
-            
-            <hr style="border:0; border-top:1px solid #edf2f7; margin:20px 0;">
-            <label style="color:#e53e3e; font-weight:bold;">⚠️ นำเข้าไฟล์ฐานข้อมูลเดิม (.db):</label>
-            <input type="file" id="importFile" accept=".db" onchange="importDatabase()" style="margin-top:8px;">
-        </div>
-    </div>
+    <div id="sys-tab" class="tab-content"><div class="card"><h2>จัดการฐานข้อมูลสำรองดิบ (.db)</h2><p style="font-size:14px; color:#718096; line-height:1.5;">ข้อมูลทั้งหมดถูกบันทึกในรูปแบบไฟล์ SQLite ภายในเบราว์เซอร์อย่างปลอดภัยด้วย IndexedDB</p><button class="btn-primary" style="background:#48bb78; margin-bottom:20px;" onclick="exportDatabase()">📤 ส่งออกไฟล์ฐานข้อมูล (Export .db)</button><button class="btn-primary" style="background:#e53e3e; margin-bottom:20px;" onclick="resetDatabase()">🗑️ รีเซ็ตระบบ (ล้างข้อมูลและโหลดค่าเริ่มต้น)</button><hr style="border:0; border-top:1px solid #edf2f7; margin:20px 0;"><label style="color:#e53e3e; font-weight:bold;">⚠️ นำเข้าไฟล์ฐานข้อมูลเดิม (.db):</label><input type="file" id="importFile" accept=".db" onchange="importDatabase()" style="margin-top:8px;"></div></div>
 </div>
 
 <script>
-    let db;
-    let isEditingInventory = false;
-    let isEditingScrap = false;
-    let productMap = {}; 
+    const $ = id => document.getElementById(id);
+    let db, isEditingInventory = false, isEditingScrap = false, productMap = {};
 
-    const IDB_NAME = 'BatteryPwaDB_v3';
-    const STORE_NAME = 'sqlite_store';
-    const DB_KEY = 'sqlite_binary_data';
+    // IndexedDB Helper
+    const idbReq = (mode, action, data) => new Promise((res, rej) => {
+        const req = indexedDB.open('BatteryPwaDB_v3', 1);
+        req.onupgradeneeded = e => { if(!e.target.result.objectStoreNames.contains('sqlite_store')) e.target.result.createObjectStore('sqlite_store'); };
+        req.onsuccess = e => {
+            const txReq = data ? e.target.result.transaction('sqlite_store', mode).objectStore('sqlite_store')[action](data, 'sqlite_binary_data') : e.target.result.transaction('sqlite_store', mode).objectStore('sqlite_store')[action]('sqlite_binary_data');
+            txReq.onsuccess = () => res(txReq.result); txReq.onerror = () => rej(txReq.error);
+        }; req.onerror = () => rej(req.error);
+    });
+    const saveToDevice = async () => { try { await idbReq('readwrite', 'put', db.export()); } catch(e){} };
 
-    function getIDBInstance() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(IDB_NAME, 1);
-            request.onupgradeneeded = (e) => {
-                const idb = e.target.result;
-                if (!idb.objectStoreNames.contains(STORE_NAME)) {
-                    idb.createObjectStore(STORE_NAME);
-                }
-            };
-            request.onsuccess = (e) => resolve(e.target.result);
-            request.onerror = (e) => reject(request.error);
-        });
-    }
-
-    function saveToIndexedDB(binaryData) {
-        return getIDBInstance().then(idb => {
-            return new Promise((resolve, reject) => {
-                const tx = idb.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.put(binaryData, DB_KEY);
-                request.onsuccess = () => resolve();
-                request.onerror = () => reject(request.error);
-            });
-        });
-    }
-
-    function loadFromIndexedDB() {
-        return getIDBInstance().then(idb => {
-            return new Promise((resolve, reject) => {
-                const tx = idb.transaction(STORE_NAME, 'readonly');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.get(DB_KEY);
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        });
-    }
-
-    function deleteFromIndexedDB() {
-        return getIDBInstance().then(idb => {
-            return new Promise((resolve, reject) => {
-                const tx = idb.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.delete(DB_KEY);
-                request.onsuccess = () => resolve();
-                request.onerror = () => reject(request.error);
-            });
-        });
-    }
+    // SQLite Helper
+    const queryOne = (sql, params = []) => {
+        const stmt = db.prepare(sql); stmt.bind(params);
+        const res = stmt.step() ? stmt.getAsObject() : null; stmt.free(); return res;
+    };
 
     function switchTab(tabId, btn) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        
-        document.getElementById(tabId).classList.add('active');
-        if (btn) {
-            btn.classList.add('active');
-        } else {
-            const indexMap = {'sale-tab':0, 'stock-tab':1, 'scrap-tab':2, 'report-tab':3, 'sys-tab':4};
-            const buttons = document.querySelectorAll('.tab-btn');
-            if(buttons[indexMap[tabId]]) buttons[indexMap[tabId]].classList.add('active');
-        }
-        
+        document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
+        $(tabId).classList.add('active');
+        (btn || document.querySelectorAll('.tab-btn')[{'sale-tab':0, 'stock-tab':1, 'scrap-tab':2, 'report-tab':3, 'sys-tab':4}[tabId]]).classList.add('active');
         if(tabId === 'stock-tab') { isEditingInventory = false; loadStockData(); }
         if(tabId === 'scrap-tab') { isEditingScrap = false; loadScrapConfig(); }
         if(tabId === 'report-tab') loadDashboard();
     }
 
-    initSqlJs({ locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${filename}` }).then(async function(SQL){
-        let savedData;
-        try { savedData = await loadFromIndexedDB(); } catch(e) {}
-
-        if (savedData) {
-            db = new SQL.Database(savedData);
-        } else {
-            db = new SQL.Database();
-            db.run(`
-                CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, brand TEXT, model TEXT, jis TEXT, size_cat TEXT, stock INTEGER, cost REAL, price REAL);
-                CREATE TABLE IF NOT EXISTS scrap_categories (id INTEGER PRIMARY KEY, size_name TEXT UNIQUE, default_discount REAL, stock INTEGER DEFAULT 0);
-                CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY, date TEXT, type TEXT, model_name TEXT, qty INTEGER, total_amount REAL, net_profit REAL);
-            `);
+    initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` }).then(async SQL => {
+        let saved = await idbReq('readonly', 'get').catch(()=>{});
+        db = saved ? new SQL.Database(saved) : new SQL.Database();
+        if (!saved) {
+            db.run(`CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, brand TEXT, model TEXT, jis TEXT, size_cat TEXT, stock INTEGER, cost REAL, price REAL);`);
+            db.run(`CREATE TABLE IF NOT EXISTS scrap_categories (id INTEGER PRIMARY KEY, size_name TEXT UNIQUE, default_discount REAL, stock INTEGER DEFAULT 0);`);
+            db.run(`CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY, date TEXT, type TEXT, model_name TEXT, qty INTEGER, total_amount REAL, net_profit REAL);`);
             
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (1, 'YUASA', 'Y-HB', '95D31L', 'D31', 4, 2200, 2800);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (2, 'YUASA', 'Y-HB', '95D31R', 'D31', 4, 2200, 2800);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (3, 'FB', 'F-135', '85D31L', 'D31', 4, 2400, 2900);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (4, 'FB', 'F-135', '85D31R', 'D31', 4, 2400, 2900);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (5, 'YUASA', 'Y-MF195', '115D31L', 'D31', 4, 2500, 3000);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (6, 'YUASA', 'Y-MF195', '115D31R', 'D31', 4, 2500, 3000);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (7, 'GS', 'MFX-190', '105D31L', 'D31', 4, 2600, 3100);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (8, 'GS', 'MFX-190', '105D31R', 'D31', 4, 2600, 3100);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (9, 'YUASA', 'MFLN3', 'LN3', 'LN3', 4, 2100, 3000);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (10, '3K', 'SVXLN3', 'LN3', 'LN3', 4, 2800, 3300);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (11, 'YUASA', 'Y-MF95', '95D26L', 'D26', 4, 2000, 2500);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (12, 'YUASA', 'Y-MF95', '95D26R', 'D26', 4, 2000, 2500);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (13, 'YUASA', 'Y-MF60', '55B24L', 'B24', 4, 1300, 1900);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (14, 'YUASA', 'Y-MF60', '55B24R', 'B24', 4, 1300, 1900);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (15, 'YUASA', 'Y-MF45', '40B19L', 'B19', 4, 1200, 1800);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (16, 'YUASA', 'Y-MF45', '40B19R', 'B19', 4, 1200, 1800);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (17, 'FB', 'S-85LN4', 'DIN85', 'LN4', 4, 2800, 3400);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (18, 'FB', 'Gold-85LN4', 'DIN85', 'LN4', 4, 3200, 3800);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (19, 'FB', 'S-75LN3', 'DIN75', 'LN3', 4, 2400, 2900);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (20, 'FB', 'Gold-72LBN3', 'DIN72', 'LN3', 4, 2800, 3300);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (21, 'FB', 'S-65LN2', 'DIN65', 'LN2', 4, 2500, 3000);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (22, '3K', '12N24-3', '26A19L', 'A19', 4, 1500, 1900);`);
-            db.run(`INSERT OR IGNORE INTO products (id, brand, model, jis, size_cat, stock, cost, price) VALUES (23, '3K', '12N24-3', '26A19R', 'A19', 4, 1500, 1900);`);
-            
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (1, 'D31', 500, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (2, 'LN4', 500, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (3, 'D26', 300, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (4, 'LN3', 400, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (5, 'LN2', 300, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (6, 'B24', 200, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (7, 'B19', 200, 0);`);
-            db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (8, 'A19', 100, 0);`);
-            
+            [[1,'YUASA','Y-HB','95D31L','D31',4,2200,2800], [2,'YUASA','Y-HB','95D31R','D31',4,2200,2800], [3,'FB','F-135','85D31L','D31',4,2400,2900], [4,'FB','F-135','85D31R','D31',4,2400,2900], [5,'YUASA','Y-MF195','115D31L','D31',4,2500,3000], [6,'YUASA','Y-MF195','115D31R','D31',4,2500,3000], [7,'GS','MFX-190','105D31L','D31',4,2600,3100], [8,'GS','MFX-190','105D31R','D31',4,2600,3100], [9,'YUASA','MFLN3','LN3','LN3',4,2100,3000], [10,'3K','SVXLN3','LN3','LN3',4,2800,3300], [11,'YUASA','Y-MF95','95D26L','D26',4,2000,2500], [12,'YUASA','Y-MF95','95D26R','D26',4,2000,2500], [13,'YUASA','Y-MF60','55B24L','B24',4,1300,1900], [14,'YUASA','Y-MF60','55B24R','B24',4,1300,1900], [15,'YUASA','Y-MF45','40B19L','B19',4,1200,1800], [16,'YUASA','Y-MF45','40B19R','B19',4,1200,1800], [17,'FB','S-85LN4','DIN85','LN4',4,2800,3400], [18,'FB','Gold-85LN4','DIN85','LN4',4,3200,3800], [19,'FB','S-75LN3','DIN75','LN3',4,2400,2900], [20,'FB','Gold-72LBN3','DIN72','LN3',4,2800,3300], [21,'FB','S-65LN2','DIN65','LN2',4,2500,3000], [22,'3K','12N24-3','26A19L','A19',4,1500,1900], [23,'3K','12N24-3','26A19R','A19',4,1500,1900]].forEach(p => db.run(`INSERT OR IGNORE INTO products VALUES (?,?,?,?,?,?,?,?)`, p));
+            [[1,'D31',500],[2,'LN4',500],[3,'D26',300],[4,'LN3',400],[5,'LN2',300],[6,'B24',200],[7,'B19',200],[8,'A19',100]].forEach(s => db.run(`INSERT OR IGNORE INTO scrap_categories VALUES (?,?,?,0)`, s));
             saveToDevice();
         }
-        setupYearDropdown();
-        filterProducts();
-        loadStockData();
+        let yrHTML = ""; for(let i=0; i<5; i++) { let y = new Date().getFullYear()-i; yrHTML += `<option value="${y}">${y+543}</option>`; }
+        $('reportYear').innerHTML = yrHTML; $('reportMonth').value = String(new Date().getMonth() + 1).padStart(2, '0');
+        filterProducts(); loadStockData();
     });
 
-    async function saveToDevice() {
-        try {
-            const data = db.export(); 
-            await saveToIndexedDB(data);
-        } catch(e) {}
+    function selectSize(size) {
+        document.querySelectorAll('.size-btn').forEach(el => el.classList.toggle('active', el.dataset.size === size));
+        $('sizeFilter').value = size; filterProducts();
     }
 
-    function setupYearDropdown() {
-        const currentYear = new Date().getFullYear();
-        const yearSelect = document.getElementById('reportYear');
-        yearSelect.innerHTML = "";
-        for(let i = 0; i < 5; i++) {
-            let y = currentYear - i;
-            yearSelect.innerHTML += `<option value="${y}">${y+543}</option>`;
-        }
-        document.getElementById('reportMonth').value = String(new Date().getMonth() + 1).padStart(2, '0');
-    }
-
+    // สร้างตารางปุ่มรุ่นแบตเตอรี่ (Model Grid)
     function filterProducts() {
-        const size = document.getElementById('sizeFilter').value;
+        const size = $('sizeFilter').value;
+        const stmt = db.prepare("SELECT id, brand, model, jis, stock, (brand||' '||model||' ('||jis||')') AS full FROM products" + (size !== "ALL" ? " WHERE size_cat=?" : ""));
+        if(size !== "ALL") stmt.bind([size]);
         
-        let query = "SELECT id, (brand || ' ' || model || ' (' || jis || ')') AS full_title FROM products WHERE 1=1";
-        let params = [];
+        let opt = "", mGrid = ""; productMap = {}; 
         
-        if (size !== "ALL") {
-            query += " AND size_cat = ?";
-            params.push(size);
-        }
-        
-        const stmt = db.prepare(query);
-        if(params.length > 0) stmt.bind(params);
-        
-        let options = "";
-        productMap = {}; 
-        
-        while(stmt.step()) {
-            const row = stmt.getAsObject();
-            options += `<option value="${row.full_title}">`;
-            productMap[row.full_title] = row.id;
-        }
+        while(stmt.step()) { 
+            const r = stmt.getAsObject(); 
+            opt += `<option value="${r.full}">`; 
+            productMap[r.full] = r.id; 
+            
+            // ออกแบบปุ่มสี่เหลี่ยมด้านล่าง
+            let sTxt = r.stock > 0 ? `<span style="color:#38a169;">เหลือ ${r.stock} ลูก</span>` : `<span style="color:#e53e3e;">สินค้าหมด!</span>`;
+            mGrid += `<div class="model-btn" data-id="${r.id}" onclick="selectProduct(${r.id})">
+                        <div class="m-brand">${r.brand}</div>
+                        <div class="m-name">${r.model} (${r.jis})</div>
+                        <div style="font-size:12px; margin-top:4px; font-weight:bold;">${sTxt}</div>
+                      </div>`;
+        } 
         stmt.free();
         
-        document.getElementById('saleProductList').innerHTML = options;
-        
-        document.getElementById('saleSearchInput').value = '';
-        document.getElementById('saleProduct').value = '';
+        $('saleProductList').innerHTML = opt; 
+        $('modelGrid').innerHTML = mGrid || '<div style="grid-column: span 2; text-align: center; padding: 15px; color: #a0aec0;">ไม่พบสินค้ารุ่นที่ตรงกับขนาดนี้</div>';
+        $('saleSearchInput').value = $('saleProduct').value = ''; 
         updateSalePrice();
     }
 
-    function handleProductSelection() {
-        const inputVal = document.getElementById('saleSearchInput').value;
-        const pId = productMap[inputVal];
+    // ฟังก์ชันเมื่อผู้ใช้กดที่ปุ่มสี่เหลี่ยม
+    function selectProduct(id) {
+        $('saleProduct').value = id;
+        document.querySelectorAll('.model-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.id) === id));
+        // นำชื่อเต็มไปใส่ในช่อง Input อัตโนมัติเพื่อให้เห็นชัดๆ
+        $('saleSearchInput').value = Object.keys(productMap).find(k => productMap[k] === id) || '';
+        updateSalePrice();
+    }
+
+    // 🌟 ระบบค้นหาและกรองปุ่มด้านล่างแบบ Real-time
+    function handleSearchInput(val) {
+        const vLower = val.toLowerCase();
+        const id = productMap[val] || ''; 
+        $('saleProduct').value = id;
         
-        if (pId) {
-            document.getElementById('saleProduct').value = pId;
-        } else {
-            document.getElementById('saleProduct').value = '';
-        }
+        document.querySelectorAll('.model-btn').forEach(b => {
+            // ซ่อนหรือแสดงปุ่มตามคำที่พิมพ์ (กรองข้อมูล)
+            b.style.display = b.innerText.toLowerCase().includes(vLower) ? 'flex' : 'none';
+            // สลับสีฟ้าถ้าหากคำค้นหาตรงกับชื่อเต็มเป๊ะๆ
+            b.classList.toggle('active', parseInt(b.dataset.id) === parseInt(id));
+        });
+        
         updateSalePrice();
     }
 
     function updateSalePrice() {
-        const pId = document.getElementById('saleProduct').value;
-        if(!pId) { document.getElementById('salePriceEach').value = 0; calculateTotal(); return; }
-        
-        const stmt = db.prepare("SELECT price FROM products WHERE id = ?");
-        stmt.bind([pId]);
-        if(stmt.step()) document.getElementById('salePriceEach').value = stmt.getAsObject().price;
-        stmt.free();
+        const id = $('saleProduct').value;
+        $('salePriceEach').value = id ? queryOne("SELECT price FROM products WHERE id=?", [id])?.price || 0 : 0;
         updateScrapDiscount();
     }
 
-    function toggleTradeInSection() {
-        const checked = document.getElementById('hasTradeIn').checked;
-        document.getElementById('tradeInSection').style.display = checked ? 'block' : 'none';
-        updateTradeInSizeOptions();
-    }
-
-    function updateTradeInSizeOptions() {
-        const type = document.getElementById('tradeInType').value;
-        document.getElementById('otherSizeDiv').style.display = (type === 'other') ? 'block' : 'none';
-        updateScrapDiscount();
-    }
-
+    function toggleTradeInSection() { $('tradeInSection').style.display = $('hasTradeIn').checked ? 'block' : 'none'; updateTradeInSizeOptions(); }
+    function updateTradeInSizeOptions() { $('otherSizeDiv').style.display = ($('tradeInType').value === 'other') ? 'block' : 'none'; updateScrapDiscount(); }
     function updateScrapDiscount() {
-        if(!document.getElementById('hasTradeIn').checked) { calculateTotal(); return; }
-        const type = document.getElementById('tradeInType').value;
-        
-        let targetSize = "D31";
-        if (type === 'same') {
-            const pId = document.getElementById('saleProduct').value;
-            if(pId) {
-                const stmt = db.prepare("SELECT size_cat FROM products WHERE id = ?");
-                stmt.bind([pId]);
-                if(stmt.step()) targetSize = stmt.getAsObject().size_cat;
-                stmt.free();
-            }
-        } else {
-            targetSize = document.getElementById('saleScrapCategory').value;
-        }
-        
-        const stmt = db.prepare("SELECT default_discount FROM scrap_categories WHERE size_name = ?");
-        stmt.bind([targetSize]);
-        if(stmt.step()) document.getElementById('saleScrapDiscount').value = stmt.getAsObject().default_discount;
-        stmt.free();
+        if(!$('hasTradeIn').checked) return calculateTotal();
+        let size = $('tradeInType').value === 'same' ? (queryOne("SELECT size_cat FROM products WHERE id=?", [$('saleProduct').value])?.size_cat || "D31") : $('saleScrapCategory').value;
+        $('saleScrapDiscount').value = queryOne("SELECT default_discount FROM scrap_categories WHERE size_name=?", [size])?.default_discount || 0;
         calculateTotal();
     }
 
     function calculateTotal() {
-        const qty = parseInt(document.getElementById('saleQty').value) || 0;
-        const priceEach = parseFloat(document.getElementById('salePriceEach').value) || 0;
-        let total = qty * priceEach;
-
-        if (document.getElementById('hasTradeIn').checked) {
-            const sQty = parseInt(document.getElementById('saleScrapQty').value) || 0;
-            const sDiscount = parseFloat(document.getElementById('saleScrapDiscount').value) || 0;
-            total -= (sQty * sDiscount);
-        }
-        document.getElementById('totalNetText').textContent = total.toLocaleString() + " ฿";
+        let total = (parseInt($('saleQty').value)||0) * (parseFloat($('salePriceEach').value)||0);
+        if($('hasTradeIn').checked) total -= (parseInt($('saleScrapQty').value)||0) * (parseFloat($('saleScrapDiscount').value)||0);
+        $('totalNetText').textContent = total.toLocaleString() + " ฿";
     }
 
-function processSale() {
-        const pId = document.getElementById('saleProduct').value;
-        if(!pId) {
-            alert('กรุณาเลือกรุ่นแบตเตอรี่ใหม่ที่ต้องการขายให้ถูกต้องก่อนครับ');
-            return;
-        }
-        const qty = parseInt(document.getElementById('saleQty').value) || 0;
-        if(qty <= 0) return;
+    function processSale() {
+        const pId = $('saleProduct').value, qty = parseInt($('saleQty').value)||0;
+        if(!pId || qty <= 0) return alert('กรุณาเลือกรุ่นแบตเตอรี่และจำนวนให้ถูกต้องก่อนครับ');
+        const res = queryOne("SELECT brand, model, jis, size_cat, stock, price, cost FROM products WHERE id=?", [pId]);
+        if(!res) return;
+        if(res.stock < qty) return alert(`สินค้าคงเหลือไม่พอ! คลังเหลืออยู่ ${res.stock} ลูก`);
 
-        const stmt = db.prepare("SELECT brand, model, jis, size_cat, stock, price, cost FROM products WHERE id = ?");
-        stmt.bind([pId]);
-        if(!stmt.step()) { stmt.free(); return; }
-        const resObj = stmt.getAsObject();
-        stmt.free();
-
-        let model_name = `${resObj.brand} ${resObj.model} (${resObj.jis})`;
-        let currentStock = resObj.stock;
-        let price = resObj.price;
-        let cost = resObj.cost;
-        let product_size = resObj.size_cat;
-
-        if(currentStock < qty) {
-            alert(`สินค้าคงเหลือไม่พอ! คลังเหลืออยู่ ${currentStock} ลูก`);
-            return;
+        let sQty = 0, sDiscount = 0, targetScrap = "";
+        if($('hasTradeIn').checked) {
+            sQty = parseInt($('saleScrapQty').value)||0; sDiscount = parseFloat($('saleScrapDiscount').value)||0;
+            targetScrap = $('tradeInType').value === 'same' ? res.size_cat : $('saleScrapCategory').value;
         }
 
-        let sQty = 0;
-        let sDiscount = 0;
-        let targetScrapSize = "";
-        
-        if(document.getElementById('hasTradeIn').checked) {
-            sQty = parseInt(document.getElementById('saleScrapQty').value) || 0;
-            sDiscount = parseFloat(document.getElementById('saleScrapDiscount').value) || 0;
-            const type = document.getElementById('tradeInType').value;
-            targetScrapSize = (type === 'same') ? product_size : document.getElementById('saleScrapCategory').value;
-        }
-
-        let totalAmount = (price * qty) - (sQty * sDiscount);
-        let netProfit = totalAmount - (cost * qty);
-        let todayStr = new Date().toISOString().split('T')[0];
-
-        // ---------------------------------------------------------
-        // 🔒 เริ่มต้นส่วนของ Transaction ป้องกันข้อมูลเสียหาย/ไม่ครบถ้วน
-        // ---------------------------------------------------------
+        let tot = (res.price * qty) - (sQty * sDiscount), profit = tot - (res.cost * qty), dateStr = new Date().toISOString().split('T')[0];
         try {
-            db.run("BEGIN TRANSACTION;"); // 1. เปิด Transaction
-
-            // สั่งตัดสต็อกแบตใหม่
-            db.run("UPDATE products SET stock = stock - ? WHERE id = ?", [qty, pId]);
-            
-            // สั่งเพิ่มสต็อกซากแบตเก่า (ถ้ามีการเทิร์น)
-            if(sQty > 0 && targetScrapSize) {
-                db.run("UPDATE scrap_categories SET stock = stock + ? WHERE size_name = ?", [sQty, targetScrapSize]);
-            }
-
-            // สั่งบันทึกประวัติการขาย
-            db.run(`INSERT INTO transactions (date, type, model_name, qty, total_amount, net_profit) VALUES (?, ?, ?, ?, ?, ?)`, 
-                [todayStr, 'รายรับ', model_name, qty, totalAmount, netProfit]);
-
-            db.run("COMMIT;"); // 2. ยืนยันการทำงานเมื่อทุกอย่างผ่านฉลุย
-            
-        } catch (error) {
-            db.run("ROLLBACK;"); // 3. ถอยกลับการกระทำทั้งหมดหากเกิด Error
-            console.error("Sale Transaction Error:", error);
-            alert('❌ เกิดข้อผิดพลาดในการบันทึกฐานข้อมูล! รายการขายนี้ถูกยกเลิกเพื่อป้องกันข้อมูลสูญหายครับ');
-            return; // สั่งหยุดฟังก์ชันทันที ไม่ต้องรีเซ็ตหน้าจอหรือบันทึกลง IndexedDB
-        }
-        // ---------------------------------------------------------
-
-        // บันทึกลงเครื่องหลังจากมั่นใจว่าฐานข้อมูลอัปเดตสมบูรณ์
-        saveToDevice();
+            db.run("BEGIN TRANSACTION;"); db.run("UPDATE products SET stock = stock - ? WHERE id = ?", [qty, pId]);
+            if(sQty > 0 && targetScrap) db.run("UPDATE scrap_categories SET stock = stock + ? WHERE size_name = ?", [sQty, targetScrap]);
+            db.run(`INSERT INTO transactions (date, type, model_name, qty, total_amount, net_profit) VALUES (?, 'รายรับ', ?, ?, ?, ?)`, [dateStr, `${res.brand} ${res.model} (${res.jis})`, qty, tot, profit]);
+            db.run("COMMIT;"); saveToDevice();
+        } catch (e) { db.run("ROLLBACK;"); return alert('❌ เกิดข้อผิดพลาด! รายการขายถูกยกเลิก'); }
         
-        // เคลียร์ค่าหน้าจอเพื่อเตรียมทำรายการถัดไป
-        document.getElementById('saleQty').value = 1;
-        document.getElementById('saleSearchInput').value = ''; 
-        document.getElementById('saleProduct').value = ''; 
-        document.getElementById('sizeFilter').value = 'ALL';
-        document.getElementById('hasTradeIn').checked = false;
-        toggleTradeInSection();
-        filterProducts();
+        $('saleQty').value = 1; $('saleSearchInput').value = $('saleProduct').value = ''; $('hasTradeIn').checked = false; toggleTradeInSection(); selectSize('ALL');
     }
 
     function quickAddStock(id) {
-        let todayStr = new Date().toISOString().split('T')[0];
-        const stmt = db.prepare("SELECT brand, model, jis, cost FROM products WHERE id = ?");
-        stmt.bind([id]);
-        if(!stmt.step()) { stmt.free(); return; }
-        const resObj = stmt.getAsObject();
-        stmt.free();
-
-        let full_name = `${resObj.brand} ${resObj.model} (${resObj.jis})`;
-
+        const res = queryOne("SELECT brand, model, jis, cost FROM products WHERE id=?", [id]); if(!res) return;
         db.run("UPDATE products SET stock = stock + 1 WHERE id = ?", [id]);
-        db.run(`INSERT INTO transactions (date, type, model_name, qty, total_amount, net_profit) VALUES (?, ?, ?, ?, ?, ?)`,
-            [todayStr, 'รายจ่าย', full_name, 1, resObj.cost, 0]);
-            
-        saveToDevice();
-        loadStockData();
+        db.run(`INSERT INTO transactions (date, type, model_name, qty, total_amount, net_profit) VALUES (?, 'รายจ่าย', ?, 1, ?, 0)`, [new Date().toISOString().split('T')[0], `${res.brand} ${res.model} (${res.jis})`, res.cost]);
+        saveToDevice(); loadStockData();
     }
 
     function saveCurrentEditsToDB() {
-        const stockInputs = document.querySelectorAll('.edit-stock');
-        const costInputs = document.querySelectorAll('.edit-cost');
-        const priceInputs = document.querySelectorAll('.edit-price');
-        
         db.run("BEGIN TRANSACTION;");
-        stockInputs.forEach(input => {
-            const id = input.getAttribute('data-id');
-            const val = parseInt(input.value) || 0;
-            db.run("UPDATE products SET stock = ? WHERE id = ?", [val, id]);
-        });
-        costInputs.forEach(input => {
-            const id = input.getAttribute('data-id');
-            const val = parseFloat(input.value) || 0;
-            db.run("UPDATE products SET cost = ? WHERE id = ?", [val, id]);
-        });
-        priceInputs.forEach(input => {
-            const id = input.getAttribute('data-id');
-            const val = parseFloat(input.value) || 0;
-            db.run("UPDATE products SET price = ? WHERE id = ?", [val, id]);
-        });
+        document.querySelectorAll('.edit-stock').forEach(el => db.run("UPDATE products SET stock=? WHERE id=?", [parseInt(el.value)||0, el.dataset.id]));
+        document.querySelectorAll('.edit-cost').forEach(el => db.run("UPDATE products SET cost=? WHERE id=?", [parseFloat(el.value)||0, el.dataset.id]));
+        document.querySelectorAll('.edit-price').forEach(el => db.run("UPDATE products SET price=? WHERE id=?", [parseFloat(el.value)||0, el.dataset.id]));
         db.run("COMMIT;");
     }
 
     function handleInventoryEditClick() {
-        const btn = document.getElementById('editInvBtn');
-        if (!isEditingInventory) {
-            isEditingInventory = true;
-            btn.textContent = "💾 บันทึกการแก้ไข";
-            btn.style.backgroundColor = "#48bb78";
-            loadStockData();
-        } else {
-            saveCurrentEditsToDB();
-            saveToDevice();
-            isEditingInventory = false;
-            btn.textContent = "🔧 แก้ไขสต็อก ทุน และราคาขายทุกรุ่น";
-            btn.style.backgroundColor = "#4a5568";
-            loadStockData();
-            filterProducts(); 
-        }
+        const btn = $('editInvBtn');
+        if (!isEditingInventory) { isEditingInventory = true; btn.textContent = "💾 บันทึกการแก้ไข"; btn.style.background = "#48bb78"; loadStockData(); } 
+        else { saveCurrentEditsToDB(); saveToDevice(); isEditingInventory = false; btn.textContent = "🔧 แก้ไขสต็อก ทุน และราคาขายทุกรุ่น"; btn.style.background = "#4a5568"; loadStockData(); filterProducts(); }
     }
 
     function addNewProduct() {
-        const brand = document.getElementById('newBrand').value.trim();
-        const model = document.getElementById('newModel').value.trim();
-        const jis = document.getElementById('newJIS').value.trim();
-        const size = document.getElementById('newModelSize').value;
-        const stock = parseInt(document.getElementById('newModelStock').value) || 0;
-        const cost = parseFloat(document.getElementById('newModelCost').value) || 0;
-        const price = parseFloat(document.getElementById('newModelPrice').value) || 0;
-
-        if (!brand || !model || !jis) { 
-            alert('กรุณาระบุ ยี่ห้อ, รุ่น และ JIS ให้ครบถ้วน'); 
-            return; 
-        }
-
-        const checkStmt = db.prepare("SELECT id FROM products WHERE brand = ? AND model = ? AND jis = ?");
-        checkStmt.bind([brand, model, jis]);
-        if (checkStmt.step()) {
-            alert('สินค้าแบรนด์ รุ่น และรหัส JIS นี้มีอยู่ในระบบแล้วครับ');
-            checkStmt.free();
-            return;
-        }
-        checkStmt.free();
-
+        const b = $('newBrand').value.trim(), m = $('newModel').value.trim(), j = $('newJIS').value.trim();
+        if (!b || !m || !j) return alert('กรุณาระบุ ยี่ห้อ, รุ่น และ JIS ให้ครบถ้วน'); 
+        if (queryOne("SELECT id FROM products WHERE brand=? AND model=? AND jis=?", [b, m, j])) return alert('สินค้านี้มีอยู่ในระบบแล้วครับ');
         saveCurrentEditsToDB(); 
-        db.run("INSERT INTO products (brand, model, jis, size_cat, stock, cost, price) VALUES (?, ?, ?, ?, ?, ?, ?)", [brand, model, jis, size, stock, cost, price]);
-        saveToDevice();
-        loadStockData();
+        db.run("INSERT INTO products (brand, model, jis, size_cat, stock, cost, price) VALUES (?,?,?,?,?,?,?)", [b, m, j, $('newModelSize').value, parseInt($('newModelStock').value)||0, parseFloat($('newModelCost').value)||0, parseFloat($('newModelPrice').value)||0]);
+        saveToDevice(); loadStockData();
     }
 
-    function deleteProduct(id, name) {
-        if (confirm(`⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบสินค้ารุ่น "${name}" ออกจากระบบถาวร?`)) {
-            saveCurrentEditsToDB();
-            db.run("DELETE FROM products WHERE id = ?", [id]);
-            saveToDevice();
-            loadStockData();
-        }
-    }
+    function deleteProduct(id, name) { if (confirm(`⚠️ ลบสินค้ารุ่น "${name}" ถาวร?`)) { saveCurrentEditsToDB(); db.run("DELETE FROM products WHERE id=?", [id]); saveToDevice(); loadStockData(); } }
 
     function loadStockData() {
-        if (!db) return;
-        let res = db.exec("SELECT id, brand, model, jis, size_cat, stock, cost, price FROM products");
-        let html = `<tr>
-            <th>รุ่นแบตเตอรี่ (ขนาด)</th>
-            <th>จำนวน</th>
-            <th>ราคาทุน</th>
-            <th>ราคาขาย</th>
-            <th style="text-align:center;">จัดการ</th>
-        </tr>`;
-        
-        if(res.length > 0) {
-            res[0].values.forEach(row => {
-                const [id, brand, model, jis, size_cat, stock, cost, price] = row;
-                let full_display_name = `${brand} ${model} (${jis})`;
-                
-                let stockCell = isEditingInventory ? `<input type="number" class="edit-stock" data-id="${id}" value="${stock}" style="width:60px; padding:4px; font-size:14px;">` : `${stock} ลูก`;
-                let costCell = isEditingInventory ? `<input type="number" class="edit-cost" data-id="${id}" value="${cost}" style="width:70px; padding:4px; font-size:14px;">` : `${cost.toLocaleString()} ฿`;
-                let priceCell = isEditingInventory ? `<input type="number" class="edit-price" data-id="${id}" value="${price}" style="width:70px; padding:4px; font-size:14px;">` : `${price.toLocaleString()} ฿`;
-                
-                let actionBtn = isEditingInventory 
-                    ? `<button class="btn-quick-add" style="background:#e53e3e;" onclick="deleteProduct(${id}, '${full_display_name.replace(/'/g, "\\'")}')">🗑️ ลบ</button>` 
-                    : `<button class="btn-quick-add" onclick="quickAddStock(${id})">+1 สต็อก</button>`;
-
-                html += `<tr>
-                    <td><strong>${full_display_name}</strong> <span style="font-size:12px; color:#718096;">(${size_cat})</span></td>
-                    <td style="font-weight:bold; color:${!isEditingInventory && stock <= 2 ? '#e53e3e' : '#2d3748'}">${stockCell}</td>
-                    <td>${costCell}</td>
-                    <td>${priceCell}</td>
-                    <td style="text-align:center;">${actionBtn}</td>
-                </tr>`;
-            });
-        }
-
-        if (isEditingInventory) {
-            html += `<tr style="background-color: #ebf8ff;">
-                <td>
-                    <div style="display:flex; gap:4px; margin-bottom:4px;">
-                        <input type="text" id="newBrand" placeholder="ยี่ห้อ (เช่น GS)" style="flex:1; padding:4px; font-size:14px; border-color:#90cdf4;">
-                        <input type="text" id="newModel" placeholder="รุ่น (เช่น MFX-190)" style="flex:1; padding:4px; font-size:14px; border-color:#90cdf4;">
-                    </div>
-                    <div style="display:flex; gap:4px; margin-bottom:4px;">
-                        <input type="text" id="newJIS" placeholder="รหัส JIS (เช่น 105D31L)" style="flex:1; padding:4px; font-size:14px; border-color:#90cdf4;">
-                        <select id="newModelSize" style="flex:1; padding:4px; font-size:14px; border-color:#90cdf4;">
-                            <option value="D31">D31</option>
-                            <option value="LN4">LN4</option>
-                            <option value="D26">D26</option>
-                            <option value="LN3">LN3</option>
-                            <option value="LN2">LN2</option>
-                            <option value="B24">B24</option>
-                            <option value="B19">B19</option>
-                            <option value="A19">A19</option>
-                        </select>
-                    </div>
-                </td>
-                <td><input type="number" id="newModelStock" placeholder="สต็อก" style="width:60px; padding:4px; font-size:14px; border-color:#90cdf4;"></td>
-                <td><input type="number" id="newModelCost" placeholder="ทุน" style="width:70px; padding:4px; font-size:14px; border-color:#90cdf4;"></td>
-                <td><input type="number" id="newModelPrice" placeholder="ขาย" style="width:70px; padding:4px; font-size:14px; border-color:#90cdf4;"></td>
-                <td style="text-align:center;">
-                    <button class="btn-quick-add" style="background:#3182ce; padding: 12px 14px;" onclick="addNewProduct()">➕ เพิ่มใหม่</button>
-                </td>
-            </tr>`;
-        }
-
-        document.getElementById('newStockTable').innerHTML = html;
+        if (!db) return; let res = db.exec("SELECT id, brand, model, jis, size_cat, stock, cost, price FROM products"), html = `<tr><th>รุ่นแบตเตอรี่ (ขนาด)</th><th>จำนวน</th><th>ราคาทุน</th><th>ราคาขาย</th><th style="text-align:center;">จัดการ</th></tr>`;
+        if(res.length > 0) res[0].values.forEach(([id, b, m, j, size, st, c, p]) => {
+            let fn = `${b} ${m} (${j})`;
+            html += `<tr><td><strong>${fn}</strong> <span style="font-size:12px; color:#718096;">(${size})</span></td>
+            <td style="font-weight:bold; color:${!isEditingInventory&&st<=2?'#e53e3e':'#2d3748'}">${isEditingInventory?`<input type="number" class="edit-stock" data-id="${id}" value="${st}" style="width:60px; padding:4px;">`:`${st} ลูก`}</td>
+            <td>${isEditingInventory?`<input type="number" class="edit-cost" data-id="${id}" value="${c}" style="width:70px; padding:4px;">`:`${c.toLocaleString()} ฿`}</td>
+            <td>${isEditingInventory?`<input type="number" class="edit-price" data-id="${id}" value="${p}" style="width:70px; padding:4px;">`:`${p.toLocaleString()} ฿`}</td>
+            <td style="text-align:center;">${isEditingInventory?`<button class="btn-quick-add" style="background:#e53e3e;" onclick="deleteProduct(${id}, '${fn.replace(/'/g, "\\'")}')">🗑️ ลบ</button>`:`<button class="btn-quick-add" onclick="quickAddStock(${id})">+1 สต็อก</button>`}</td></tr>`;
+        });
+        if(isEditingInventory) html += `<tr style="background:#ebf8ff;"><td><div style="display:flex;gap:4px;margin-bottom:4px;"><input type="text" id="newBrand" placeholder="ยี่ห้อ" style="flex:1;padding:4px;"><input type="text" id="newModel" placeholder="รุ่น" style="flex:1;padding:4px;"></div><div style="display:flex;gap:4px;"><input type="text" id="newJIS" placeholder="JIS" style="flex:1;padding:4px;"><select id="newModelSize" style="flex:1;padding:4px;"><option value="D31">D31</option><option value="LN4">LN4</option><option value="D26">D26</option><option value="LN3">LN3</option><option value="LN2">LN2</option><option value="B24">B24</option><option value="B19">B19</option><option value="A19">A19</option></select></div></td><td><input type="number" id="newModelStock" placeholder="สต็อก" style="width:60px;padding:4px;"></td><td><input type="number" id="newModelCost" placeholder="ทุน" style="width:70px;padding:4px;"></td><td><input type="number" id="newModelPrice" placeholder="ขาย" style="width:70px;padding:4px;"></td><td style="text-align:center;"><button class="btn-quick-add" style="background:#3182ce; padding:12px;" onclick="addNewProduct()">➕ เพิ่มใหม่</button></td></tr>`;
+        $('newStockTable').innerHTML = html;
     }
 
     function handleScrapInventoryEditClick() {
-        const btn = document.getElementById('editScrapBtn');
-        if (!isEditingScrap) {
-            isEditingScrap = true;
-            btn.textContent = "💾 บันทึกการแก้ไข";
-            btn.style.backgroundColor = "#48bb78";
-            loadScrapConfig();
-        } else {
-            const stockInputs = document.querySelectorAll('.edit-scrap-stock');
-            const discountInputs = document.querySelectorAll('.edit-scrap-discount');
-            
+        const btn = $('editScrapBtn');
+        if (!isEditingScrap) { isEditingScrap = true; btn.textContent = "💾 บันทึกการแก้ไข"; btn.style.background = "#48bb78"; loadScrapConfig(); } 
+        else {
             db.run("BEGIN TRANSACTION;");
-            stockInputs.forEach(input => {
-                const size = input.getAttribute('data-size');
-                const val = parseInt(input.value) || 0;
-                db.run("UPDATE scrap_categories SET stock = ? WHERE size_name = ?", [val, size]);
-            });
-            discountInputs.forEach(input => {
-                const size = input.getAttribute('data-size');
-                const val = parseFloat(input.value) || 0;
-                db.run("UPDATE scrap_categories SET default_discount = ? WHERE size_name = ?", [val, size]);
-            });
-            db.run("COMMIT;");
-            
-            saveToDevice();
-            isEditingScrap = false;
-            btn.textContent = "🔧 แก้ไขจำนวนและส่วนลด";
-            btn.style.backgroundColor = "#4a5568";
-            loadScrapConfig();
-            updateScrapDiscount(); 
+            document.querySelectorAll('.edit-scrap-stock').forEach(el => db.run("UPDATE scrap_categories SET stock=? WHERE size_name=?", [parseInt(el.value)||0, el.dataset.size]));
+            document.querySelectorAll('.edit-scrap-discount').forEach(el => db.run("UPDATE scrap_categories SET default_discount=? WHERE size_name=?", [parseFloat(el.value)||0, el.dataset.size]));
+            db.run("COMMIT;"); saveToDevice();
+            isEditingScrap = false; btn.textContent = "🔧 แก้ไขจำนวนและส่วนลด"; btn.style.background = "#4a5568"; loadScrapConfig(); updateScrapDiscount(); 
         }
     }
 
     function loadScrapConfig() {
-        if (!db) return;
-        let res = db.exec("SELECT size_name, stock, default_discount FROM scrap_categories");
-        let html = `<tr>
-            <th>ขนาดแบตเตอรี่เก่า</th>
-            <th>จำนวน</th>
-            <th>ส่วนลดเทิร์น</th>
-        </tr>`;
-        
-        if(res.length > 0) {
-            res[0].values.forEach(row => {
-                const [size_name, stock, default_discount] = row;
-                
-                let stockCell = isEditingScrap ? `<input type="number" class="edit-scrap-stock" data-size="${size_name}" value="${stock}" style="width:85px; padding:4px; font-size:14px;">` : `${stock} ลูก`;
-                let discountCell = isEditingScrap ? `<input type="number" class="edit-scrap-discount" data-size="${size_name}" value="${default_discount}" style="width:85px; padding:4px; font-size:14px;">` : `${default_discount.toLocaleString()} ฿`;
-                
-                html += `<tr>
-                    <td style="font-weight:bold;">${size_name}</td>
-                    <td style="color:#2f855a; font-weight:bold;">${stockCell}</td>
-                    <td style="font-weight:bold;">${discountCell}</td>
-                </tr>`;
-            });
-        }
-        document.getElementById('oldStockTable').innerHTML = html;
+        if (!db) return; let res = db.exec("SELECT size_name, stock, default_discount FROM scrap_categories"), html = `<tr><th>ขนาดแบตเตอรี่เก่า</th><th>จำนวน</th><th>ส่วนลดเทิร์น</th></tr>`;
+        if(res.length > 0) res[0].values.forEach(([s, st, d]) => html += `<tr><td style="font-weight:bold;">${s}</td><td style="color:#2f855a; font-weight:bold;">${isEditingScrap?`<input type="number" class="edit-scrap-stock" data-size="${s}" value="${st}" style="width:85px; padding:4px;">`:`${st} ลูก`}</td><td style="font-weight:bold;">${isEditingScrap?`<input type="number" class="edit-scrap-discount" data-size="${s}" value="${d}" style="width:85px; padding:4px;">`:`${d.toLocaleString()} ฿`}</td></tr>`);
+        $('oldStockTable').innerHTML = html;
     }
 
     function loadDashboard() {
-        const month = document.getElementById('reportMonth').value;
-        const year = document.getElementById('reportYear').value;
-        const pattern = `${year}-${month}-%`;
+        const ptn = `${$('reportYear').value}-${$('reportMonth').value}-%`;
+        $('repIncome').textContent = (queryOne("SELECT SUM(total_amount) as t FROM transactions WHERE type='รายรับ' AND date LIKE ?", [ptn])?.t||0).toLocaleString()+" ฿";
+        $('repExpense').textContent = (queryOne("SELECT SUM(total_amount) as t FROM transactions WHERE type='รายจ่าย' AND date LIKE ?", [ptn])?.t||0).toLocaleString()+" ฿";
+        $('repProfit').textContent = (queryOne("SELECT SUM(net_profit) as t FROM transactions WHERE type='รายรับ' AND date LIKE ?", [ptn])?.t||0).toLocaleString()+" ฿";
 
-        let stmtInc = db.prepare("SELECT SUM(total_amount) as total FROM transactions WHERE type='รายรับ' AND date LIKE ?");
-        stmtInc.bind([pattern]);
-        let totalIncome = 0;
-        if(stmtInc.step()) totalIncome = stmtInc.getAsObject().total || 0;
-        stmtInc.free();
+        let sb = db.prepare("SELECT model_name, SUM(qty) as ts FROM transactions WHERE type='รายรับ' AND date LIKE ? GROUP BY model_name ORDER BY ts DESC LIMIT 5"); sb.bind([ptn]);
+        let bHtml = "<tr><th>อันดับ</th><th>รุ่นแบตเตอรี่ใหม่</th><th class='text-right'>ขายได้</th></tr>", rank = 1, hasB = false;
+        while(sb.step()) { hasB = true; const r = sb.getAsObject(); bHtml += `<tr><td>${rank++}</td><td>${r.model_name}</td><td class='text-right' style='font-weight:bold; color:#3182ce;'>${r.ts} ลูก</td></tr>`; } sb.free();
+        $('bestSellerTable').innerHTML = hasB ? bHtml : bHtml + "<tr><td colspan='3' style='text-align:center;'>ไม่มีข้อมูล</td></tr>";
 
-        let stmtExp = db.prepare("SELECT SUM(total_amount) as total FROM transactions WHERE type='รายจ่าย' AND date LIKE ?");
-        stmtExp.bind([pattern]);
-        let totalExpense = 0;
-        if(stmtExp.step()) totalExpense = stmtExp.getAsObject().total || 0;
-        stmtExp.free();
-
-        let stmtProfit = db.prepare("SELECT SUM(net_profit) as total FROM transactions WHERE type='รายรับ' AND date LIKE ?");
-        stmtProfit.bind([pattern]);
-        let netProfitOfMonth = 0;
-        if(stmtProfit.step()) netProfitOfMonth = stmtProfit.getAsObject().total || 0;
-        stmtProfit.free();
-
-        document.getElementById('repIncome').textContent = totalIncome.toLocaleString() + " ฿";
-        document.getElementById('repExpense').textContent = totalExpense.toLocaleString() + " ฿";
-        document.getElementById('repProfit').textContent = netProfitOfMonth.toLocaleString() + " ฿";
-
-        let stmtBest = db.prepare("SELECT model_name, SUM(qty) as ts FROM transactions WHERE type='รายรับ' AND date LIKE ? GROUP BY model_name ORDER BY ts DESC LIMIT 5");
-        stmtBest.bind([pattern]);
-        let bestHtml = "<tr><th>อันดับ</th><th>รุ่นแบตเตอรี่ใหม่</th><th class='text-right'>จำนวนที่ขายได้</th></tr>";
-        let rank = 1;
-        let hasBestData = false;
-        while(stmtBest.step()) {
-            hasBestData = true;
-            const row = stmtBest.getAsObject();
-            bestHtml += `<tr><td>${rank++}</td><td>${row.model_name}</td><td class='text-right' style='font-weight:bold; color:#3182ce;'>${row.ts} ลูก</td></tr>`;
-        }
-        stmtBest.free();
-        if(!hasBestData) bestHtml += "<tr><td colspan='3' style='text-align:center;'>ไม่มีข้อมูลการขายในเดือนนี้</td></tr>";
-        document.getElementById('bestSellerTable').innerHTML = bestHtml;
-
-        let stmtTx = db.prepare("SELECT date, type, model_name, qty, total_amount FROM transactions WHERE date LIKE ? ORDER BY id DESC");
-        stmtTx.bind([pattern]);
-        let txHtml = "<tr><th>วันที่</th><th>ประเภท</th><th>รายการสินค้า</th><th class='text-right'>ยอดเงินรวม</th></tr>";
-        while(stmtTx.step()) {
-            const row = stmtTx.getAsObject();
-            let d = row.date.split('-');
-            let thaiDate = `${d[2]}/${d[1]}/${parseInt(d[0])+543}`;
-            let txtColor = row.type === 'รายรับ' ? '#2f855a' : '#c53030';
-            txHtml += `<tr>
-                <td>${thaiDate}</td>
-                <td style="color:${txtColor}; font-weight:bold;">${row.type}</td>
-                <td>${row.model_name} (x${row.qty})</td>
-                <td class='text-right' style="color:${txtColor}; font-weight:bold;">${row.type==='รายรับ'?'+':'-'}${row.total_amount.toLocaleString()} ฿</td>
-            </tr>`;
-        }
-        stmtTx.free();
-        document.getElementById('txTable').innerHTML = txHtml;
+        let st = db.prepare("SELECT date, type, model_name, qty, total_amount FROM transactions WHERE date LIKE ? ORDER BY id DESC"); st.bind([ptn]);
+        let tHtml = "<tr><th>วันที่</th><th>ประเภท</th><th>รายการสินค้า</th><th class='text-right'>ยอดเงินรวม</th></tr>";
+        while(st.step()) {
+            const r = st.getAsObject(), d = r.date.split('-'), c = r.type === 'รายรับ' ? '#2f855a' : '#c53030';
+            tHtml += `<tr><td>${d[2]}/${d[1]}/${parseInt(d[0])+543}</td><td style="color:${c}; font-weight:bold;">${r.type}</td><td>${r.model_name} (x${r.qty})</td><td class='text-right' style="color:${c}; font-weight:bold;">${r.type==='รายรับ'?'+':'-'}${r.total_amount.toLocaleString()} ฿</td></tr>`;
+        } st.free();
+        $('txTable').innerHTML = tHtml;
     }
 
     function exportDatabase() {
-        const binaryDb = db.export();
-        const blob = new Blob([binaryDb], {type: "application/octet-stream"});
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `คลังบัญชีร้านแบตเตอรี่_${new Date().toISOString().split('T')[0]}.db`;
-        link.click();
+        const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([db.export()], {type: "application/octet-stream"}));
+        a.download = `Backup_${new Date().toISOString().split('T')[0]}.db`; a.click();
     }
 
-  function importDatabase() {
-        const fileInput = document.getElementById('importFile');
-        if(fileInput.files.length === 0) return;
-        const reader = new FileReader();
+    function importDatabase() {
+        const file = $('importFile').files[0]; if(!file) return; const reader = new FileReader();
         reader.onload = function() {
-            const U8Array = new Uint8Array(this.result);
-            initSqlJs({ locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${filename}` }).then(async function(SQL){
-                try {
-                    // ลองพยายามอ่านไฟล์ที่อัปโหลดเป็นฐานข้อมูล SQLite
-                    db = new SQL.Database(U8Array);
-                    
-                    // ถ้าอ่านผ่าน (ไม่มี Error) ให้บันทึกลงเครื่องและรีเฟรชหน้าจอ
-                    await saveToDevice();
-                    filterProducts();
-                    alert('📥 นำเข้าคลังข้อมูลเดิมสำเร็จแล้ว ระบบได้รีเฟรชฐานข้อมูลทั้งหมดแล้วครับ!');
-                    switchTab('sale-tab');
-                    
-                } catch (error) {
-                    // ถ้าพัง (ไม่ใช่ไฟล์ .db หรือไฟล์เสีย) โค้ดจะกระโดดมาทำงานตรงนี้แทนการค้างเงียบๆ
-                    console.error("Database import error:", error);
-                    alert('❌ นำเข้าไม่สำเร็จ! ไฟล์ที่เลือกไม่ใช่ไฟล์ฐานข้อมูลที่ถูกต้อง หรือไฟล์อาจเสียหายครับ กรุณาตรวจสอบไฟล์ใหม่อีกครั้ง');
-                    
-                } finally {
-                    // ไม่ว่าจะนำเข้าสำเร็จหรือล้มเหลว ให้เคลียร์ชื่อไฟล์ออกจากช่องอัปโหลดเสมอ
-                    fileInput.value = ''; 
-                }
+            initSqlJs({ locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}` }).then(async SQL => {
+                try { db = new SQL.Database(new Uint8Array(this.result)); await saveToDevice(); filterProducts(); alert('📥 นำเข้าสำเร็จ!'); switchTab('sale-tab'); } 
+                catch(e) { alert('❌ ไฟล์ไม่ถูกต้อง'); } finally { $('importFile').value = ''; }
             });
-        };
-        reader.readAsArrayBuffer(fileInput.files[0]);
+        }; reader.readAsArrayBuffer(file);
     }
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then(() => console.log('PWA Connected'));
-    }
-    
     async function resetDatabase() {
-        // 1. ถามเรื่องการ Export ข้อมูลก่อน
-        const shouldExport = confirm('⚠️ ข้อมูลทั้งหมดในแอปจะถูกลบถาวร!\n\nต้องการ "ดาวน์โหลดไฟล์สำรอง (Export)" เก็บไว้ก่อนหรือไม่? (แนะนำให้กด "ตกลง" เพื่อดาวน์โหลด)');
-        
-        if (shouldExport) {
-            exportDatabase();
-            alert('📥 ระบบได้สั่งดาวน์โหลดไฟล์ฐานข้อมูลของคุณแล้ว\n\nเมื่อดาวน์โหลดเสร็จสิ้น ให้กดปุ่ม "รีเซ็ตระบบ" อีกครั้งเพื่อดำเนินการลบข้อมูลครับ');
-            return; // ออกจากฟังก์ชันเพื่อให้ผู้ใช้ไปเก็บไฟล์ให้เรียบร้อยก่อน
-        }
-
-        // 2. ถ้าผู้ใช้กด "ยกเลิก" (ไม่เอาไฟล์) ให้ถามยืนยันด้วยรหัส
-        const confirmation = prompt('⚠️ พิมพ์คำว่า "RESET" เพื่อยืนยันการล้างข้อมูลทั้งหมดถาวร:\n\n(หากไม่ต้องการลบ ให้กด ยกเลิก)');
-        
-        if (confirmation === 'RESET') {
-            try {
-                await deleteFromIndexedDB();
-                alert('✅ ล้างข้อมูลและรีเซ็ตระบบเรียบร้อยแล้ว');
-                window.location.reload();
-            } catch(e) {
-                console.error("Reset Error:", e);
-                alert('❌ เกิดข้อผิดพลาดในการล้างฐานข้อมูล');
-            }
-        } else {
-            alert('🚫 ยกเลิกการรีเซ็ตข้อมูลแล้ว ข้อมูลของคุณยังปลอดภัยอยู่ครับ');
-        }
+        if(confirm('⚠️ ลบข้อมูลทั้งหมด?\n\nกด "ตกลง" เพื่อดาวน์โหลด Backup ก่อน')) { exportDatabase(); return alert('📥 ดาวน์โหลดแล้ว กดรีเซ็ตอีกครั้งเพื่อลบ'); }
+        if(prompt('พิมพ์ "RESET" เพื่อล้างข้อมูล:') === 'RESET') { try { await idbReq('readwrite', 'delete'); alert('✅ รีเซ็ตแล้ว'); location.reload(); } catch(e){} }
     }
 
- // --- ระบบแจ้งเตือนให้กด Backup เองตอน 16:30 น. เพื่อรองรับ iPad/Safari ---
+    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').then(()=>console.log('PWA Connected'));
+
     function checkAndPromptBackup() {
-        const now = new Date();
-        const hour = now.getHours();
-        const minute = now.getMinutes();
-        const currentDate = now.toISOString().split('T')[0];
-        const lastBackupDate = localStorage.getItem('lastAutoBackupDate');
-
-        // ตรวจสอบว่าเป็นเวลา 16:30 น. เป็นต้นไป และยังไม่ได้สำรองข้อมูลของวันนี้
-        if ((hour > 16 || (hour === 16 && minute >= 30)) && lastBackupDate !== currentDate) {
-            
-            // สร้างกล่องข้อความแจ้งเตือน (Prompt) เพื่อให้เกิด User Gesture ในการดาวน์โหลด
-            if (confirm('📢 ถึงเวลา 16:30 น. แล้ว!\nแนะนำให้กด "ตกลง" เพื่อดาวน์โหลดไฟล์สำรองฐานข้อมูล (.db) ของวันนี้เก็บไว้ความปลอดภัยครับ')) {
-                
-                exportDatabase(); // รันฟังก์ชันดาวน์โหลดไฟล์ (ตอนนี้จะทำงานได้เพราะมี User Gesture จากการกด "ตกลง")
-                localStorage.setItem('lastAutoBackupDate', currentDate); // บันทึกวันที่ไว้เพื่อไม่ให้แจ้งเตือนซ้ำอีกในวันเดียวกัน
-                console.log('ผู้ใช้ได้ทำการกดสำรองข้อมูลประจำวันที่ ' + currentDate + ' เรียบร้อยแล้ว');
-                
-            } else {
-                // หากผู้ใช้กดปฏิเสธ (Cancel) จะยังไม่บันทึกระบบ เพื่อให้ระบบแจ้งเตือนใหม่หากมีการเปิดหน้าแอปขึ้นมาอีกครั้ง
-                console.log('ผู้ใช้ปฏิเสธการสำรองข้อมูลชั่วคราว');
-            }
+        const d = new Date(), dateStr = d.toISOString().split('T')[0];
+        if((d.getHours() > 16 || (d.getHours() === 16 && d.getMinutes() >= 30)) && localStorage.getItem('lastAutoBackupDate') !== dateStr) {
+            if(confirm('📢 ถึงเวลา 16:30 น. แล้ว!\nแนะนำให้ดาวน์โหลดไฟล์สำรองของวันนี้ครับ')) { exportDatabase(); localStorage.setItem('lastAutoBackupDate', dateStr); }
         }
     }
-
-    // สั่งให้ระบบเช็คเวลาทุกๆ 1 นาที (60000 มิลลิวินาที)
-    setInterval(checkAndPromptBackup, 60000);
-    
-    // สั่งรันเช็คทันที 1 ครั้งหลังจากเปิดแอป 2 วินาที
-    setTimeout(checkAndPromptBackup, 2000);
-
+    setInterval(checkAndPromptBackup, 60000); setTimeout(checkAndPromptBackup, 2000);
 </script>
-
 </body>
 </html>
