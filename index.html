@@ -106,8 +106,36 @@
         let saved = await idbReq('readonly', 'get').catch(()=>{}); db = saved ? new SQL.Database(saved) : new SQL.Database();
         if (!saved) {
             ['products (id INTEGER PRIMARY KEY AUTOINCREMENT, brand TEXT, model TEXT, jis TEXT, size_cat TEXT, stock INTEGER, cost REAL, price REAL)', 'scrap_categories (id INTEGER PRIMARY KEY, size_name TEXT UNIQUE, default_discount REAL, stock INTEGER DEFAULT 0)', 'transactions (id INTEGER PRIMARY KEY, date TEXT, type TEXT, model_name TEXT, qty INTEGER, total_amount REAL, net_profit REAL)'].forEach(t=>run(`CREATE TABLE IF NOT EXISTS ${t};`));
-            [[1,'YUASA','Y-HB','95D31L','D31',4,2200,2800],[2,'YUASA','Y-HB','95D31R','D31',4,2200,2800],[3,'FB','F-135','85D31L','D31',4,2400,2900],[4,'FB','F-135','85D31R','D31',4,2400,2900],[5,'YUASA','Y-MF195','115D31L','D31',4,2500,3000],[6,'YUASA','Y-MF195','115D31R','D31',4,2500,3000],[7,'GS','MFX-190','105D31L','D31',4,2600,3100],[8,'GS','MFX-190','105D31R','D31',4,2600,3100],[9,'YUASA','MFLN3','LN3','LN3',4,2100,3000],[10,'3K','SVXLN3','LN3','LN3',4,2800,3300],[11,'YUASA','Y-MF95','95D26L','D26',4,2000,2500],[12,'YUASA','Y-MF95','95D26R','D26',4,2000,2500],[13,'YUASA','Y-MF60','55B24L','B24',4,1300,1900],[14,'YUASA','Y-MF60','55B24R','B24',4,1300,1900],[15,'YUASA','Y-MF45','40B19L','B19',4,1200,1800],[16,'YUASA','Y-MF45','40B19R','B19',4,1200,1800],[17,'FB','S-85LN4','DIN85','LN4',4,2800,3400],[18,'FB','Gold-85LN4','DIN85','LN4',4,3200,3800],[19,'FB','S-75LN3','DIN75','LN3',4,2400,2900],[20,'FB','Gold-72LBN3','DIN72','LN3',4,2800,3300],[21,'FB','S-65LN2','DIN65','LN2',4,2500,3000],[22,'3K','12N24-3','26A19L','A19',4,1500,1900],[23,'3K','12N24-3','26A19R','A19',4,1500,1900]].forEach(p=>run(`INSERT OR IGNORE INTO products VALUES (?,?,?,?,?,?,?,?)`,p));
-            [[1,'D31',500],[2,'LN4',500],[3,'D26',300],[4,'LN3',400],[5,'LN2',300],[6,'B24',200],[7,'B19',200],[8,'A19',100]].forEach(s=>run(`INSERT OR IGNORE INTO scrap_categories VALUES (?,?,?,0)`,s)); saveToDevice();
+            [
+                [1, 'YUASA', 'Y-HB', '95D31L', 'D31', 4, 2300, 2900],
+                [2, 'YUASA', 'Y-HB', '95D31R', 'D31', 4, 2300, 2900],
+                [3, 'FB', 'F-135', '85D31L', 'D31', 4, 2400, 3000],
+                [4, 'FB', 'F-135', '85D31R', 'D31', 4, 2400, 3000],
+                [5, 'YUASA', 'Y-MF195', '115D31L', 'D31', 4, 2500, 3100],
+                [6, 'YUASA', 'Y-MF195', '115D31R', 'D31', 4, 2500, 3100],
+                [7, 'GS', 'MFX-190', '105D31L', 'D31', 4, 2600, 3200],
+                [8, 'GS', 'MFX-190', '105D31R', 'D31', 4, 2600, 3200],
+                [9, 'FB', 'S-85LN4', 'DIN85', 'LN4', 4, 2800, 3500],
+                [10, 'FB', 'Gold-85LN4', 'DIN85', 'LN4', 4, 3200, 4000],
+                [11, 'YUASA', 'Y-MF95', '95D26L', 'D26', 4, 2000, 2600],
+                [12, 'YUASA', 'Y-MF95', '95D26R', 'D26', 4, 2000, 2600],
+                [13, 'YUASA', 'MF-LN3', 'DIN75', 'LN3', 4, 2100, 2700],
+                [14, 'FB', 'S-75LN3', 'DIN75', 'LN3', 4, 2400, 3000],
+                [15, '3K', 'SVXLN3', 'DIN75', 'LN3', 4, 2800, 3300],
+                [16, 'FB', 'Gold-72LBN3', 'DIN72', 'LN3', 4, 2800, 3300],
+                [17, 'YUASA', 'Y-MF60', '55B24L', 'B24', 4, 1300, 2000],
+                [18, 'YUASA', 'Y-MF60', '55B24R', 'B24', 4, 1300, 2000],
+                [19, 'FB', 'S-65LN2', 'DIN65', 'LN2', 4, 2500, 3200],
+                [20, 'YUASA', 'Y-MF45', '40B19L', 'B19', 4, 1200, 1900],
+                [21, 'YUASA', 'Y-MF45', '40B19R', 'B19', 4, 1200, 1900],
+                [22, '3K', '12N24-3', '26A19L', 'A19', 4, 1500, 1900],
+                [23, '3K', '12N24-3', '26A19R', 'A19', 4, 1500, 1900],
+                [24, 'YUASA', 'N100', '95E41R', 'N100', 2, 3000, 3600],
+                [25, 'YUASA', 'N120Z', '115F51R', 'N120', 1, 3700, 4400],
+                [26, 'GS', 'N120', '115F51R', 'N120', 2, 4000, 4700],
+                [27, 'YUASA', 'N150', '145G51R', 'N150', 1, 4400, 5200]
+    ].forEach(p => run(`INSERT OR IGNORE INTO products VALUES (?,?,?,?,?,?,?,?)`, p));
+            [[1,'D31',500],[2,'LN4',500],[3,'D26',400],[4,'LN3',400],[5,'B24',300],[6,'LN2',300],[7,'B19',200],[8,'A19',200],[9,'N100',600],[10,'N120',700],[11,'N150',800]].forEach(s=>run(`INSERT OR IGNORE INTO scrap_categories VALUES (?,?,?,0)`,s)); saveToDevice();
         }
         let yrHTML=""; for(let i=0;i<5;i++){ let y=new Date().getFullYear()-i; yrHTML+=`<option value="${y}">${y+543}</option>`; }
         $('reportYear').innerHTML=yrHTML; $('reportMonth').value=String(new Date().getMonth()+1).padStart(2,'0');
