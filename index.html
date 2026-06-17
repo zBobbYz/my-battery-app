@@ -59,7 +59,7 @@
             <div class="form-group" style="background:#edf2f7;padding:15px;border-radius:8px"><label>🔍 เลือกรุ่นแบตเตอรี่ที่ต้องการขาย:</label><input type="text" list="saleProductList" id="saleSearchInput" placeholder="พิมพ์ค้นหา หรือกดเลือกจากตารางด้านล่าง..." oninput="handleSearchInput(this.value)"><datalist id="saleProductList"></datalist><input type="hidden" id="saleProduct"><div class="model-grid" id="modelGrid"></div></div>
             <div class="flex-group">
                 <div class="form-group"><label>จำนวน (ลูก):</label><input type="number" id="saleQty" value="1" min="1" oninput="calculateTotal()"></div>
-                <div class="form-group"><label>ราคาขายเฉพาะบิลนี้ (บาท):</label><input type="number" id="salePriceEach" oninput="calculateTotal()" style="background:#fff; border:2px solid #3182ce; font-weight:bold; color:#2b6cb0;"></div>
+                <div class="form-group"><label>ราคาขาย (บาท):</label><input type="number" id="salePriceEach" oninput="calculateTotal()" style="background:#fff; border:2px solid #3182ce; font-weight:bold; color:#2b6cb0;"></div>
             </div>
             
             <div class="toggle-container"><span style="font-weight:bold;font-size:15px">🔌 มีแบตเตอรี่เก่ามาเทิร์น</span><label class="switch"><input type="checkbox" id="hasTradeIn" onchange="toggleTradeInSection()"><span class="slider"></span></label></div>
@@ -72,7 +72,7 @@
                 <div id="tradeInList"></div> 
             </div>
 
-            <div class="form-group" style="background:#ebf8ff;padding:15px;border-radius:8px;text-align:center"><span style="font-size:14px;color:#2b6cb0;font-weight:bold">ราคาสุทธิที่ลูกค้าต้องจ่าย</span><div style="font-size:32px;font-weight:bold;color:#2b6cb0" id="totalNetText">0 ฿</div></div><button class="btn-primary" onclick="processSale()">บันทึกการขาย</button>
+            <div class="form-group" style="background:#ebf8ff;padding:15px;border-radius:8px;text-align:center"><span style="font-size:14px;color:#2b6cb0;font-weight:bold">ราคาสุทธิ</span><div style="font-size:32px;font-weight:bold;color:#2b6cb0" id="totalNetText">0 ฿</div></div><button class="btn-primary" onclick="processSale()">บันทึกการขาย</button>
         </div>
     </div>
 
@@ -82,14 +82,17 @@
             <div class="form-group" style="background:#edf2f7;padding:15px;border-radius:8px"><label>🔍 เลือกรุ่นแบตเตอรี่ที่ต้องการซื้อ:</label><input type="text" list="buyProductList" id="buySearchInput" placeholder="พิมพ์ค้นหา หรือกดเลือกจากตารางด้านล่าง..." oninput="handleBuySearchInput(this.value)"><datalist id="buyProductList"></datalist><input type="hidden" id="buyProduct"><div class="model-grid" id="buyModelGrid"></div></div>
             <div class="flex-group">
                 <div class="form-group"><label>จำนวน (ลูก):</label><input type="number" id="buyQty" value="1" min="1" oninput="calculateBuyTotal()"></div>
-                <div class="form-group"><label>ราคาทุนเฉพาะบิลนี้ (บาท):</label><input type="number" id="buyCostEach" oninput="calculateBuyTotal()" style="background:#fff; border:2px solid #e53e3e; font-weight:bold; color:#c53030;"></div>
+                <div class="form-group"><label>ราคาทุน (บาท):</label><input type="number" id="buyCostEach" oninput="calculateBuyTotal()" style="background:#fff; border:2px solid #e53e3e; font-weight:bold; color:#c53030;"></div>
             </div>
             <div class="form-group" style="background:#fff5f5;padding:15px;border-radius:8px;text-align:center"><span style="font-size:14px;color:#c53030;font-weight:bold">ราคาสุทธิ</span><div style="font-size:32px;font-weight:bold;color:#c53030" id="buyTotalNetText">0 ฿</div></div><button class="btn-primary" style="background:#fa0404" onclick="processPurchase()">บันทึกการซื้อ</button>
         </div>
     </div>
 
     <div id="stock-tab" class="tab-content">
-        <div class="card" style="overflow-x:auto"><h2>📦 รายการสต็อกแบตเตอรี่ใหม่</h2>
+        <div class="card" style="overflow-x:auto"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:2px solid #edf2f7; padding-bottom:8px;">
+                <h2 style="margin:0; border:none; padding:0; color:#2b6cb0;">📦 รายการสต็อกแบตเตอรี่ใหม่</h2>
+                <button class="btn-quick-add" style="background:#107c41; padding:8px 12px; font-size:14px;" onclick="exportStockToExcel()">🟢 ส่งออกคลัง Excel</button>
+            </div>
             <div class="form-group" style="background:#edf2f7;padding:15px;border-radius:8px"><label>⚡ กรองตามขนาด:</label><div class="size-grid" id="invSizeGrid" style="margin-bottom:15px"><button class="size-btn active" data-size="ALL" onclick="filterInvSize('ALL')">ทั้งหมด</button><button class="size-btn" data-size="D31" onclick="filterInvSize('D31')">D31</button><button class="size-btn" data-size="LN4" onclick="filterInvSize('LN4')">LN4</button><button class="size-btn" data-size="D26" onclick="filterInvSize('D26')">D26</button><button class="size-btn" data-size="LN3" onclick="filterInvSize('LN3')">LN3</button><button class="size-btn" data-size="LN2" onclick="filterInvSize('LN2')">LN2</button><button class="size-btn" data-size="B24" onclick="filterInvSize('B24')">B24</button><button class="size-btn" data-size="B19" onclick="filterInvSize('B19')">B19</button><button class="size-btn" data-size="A19" onclick="filterInvSize('A19')">A19</button><button class="size-btn" data-size="N100" onclick="filterInvSize('N100')">N100</button><button class="size-btn" data-size="N120" onclick="filterInvSize('N120')">N120</button><button class="size-btn" data-size="N150" onclick="filterInvSize('N150')">N150</button></div><label style="margin-top:10px; display:block;">🏷️ กรองตามยี่ห้อ:</label><div class="size-grid" id="invBrandGrid"></div></div>
             <table id="newStockTable"></table><button id="editInvBtn" class="btn-primary" style="background:#4a5568;margin-top:20px" onclick="handleInventoryEditClick()">🔧 แก้ไขสต็อก ราคาทุน และราคาขาย</button>
         </div>
@@ -97,12 +100,12 @@
 
     <div id="scrap-tab" class="tab-content">
         <div class="card" style="overflow-x:auto">
-            <h2>🔋 จำนวนและส่วนลดเทิร์นแบตเตอรี่เก่า</h2>
+            <h2>🔋 จำนวนและราคาเทิร์นแบตเตอรี่เก่า</h2>
             <table id="oldStockTable"></table>
             
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button id="editScrapBtn" class="btn-primary" style="background:#4a5568; flex:1;" onclick="handleScrapInventoryEditClick()">🔧 แก้ไขส่วนลดมาตรฐาน</button>
-                <button class="btn-primary" style="background:#38a169; flex:1;" onclick="openBuyScrapModal()">📥 รับเทิร์นแบตเก่า (รับซื้อ)</button>
+                <button id="editScrapBtn" class="btn-primary" style="background:#4a5568; flex:1;" onclick="handleScrapInventoryEditClick()">🔧 แก้ไขจำนวนราคาเทิร์น</button>
+                <button class="btn-primary" style="background:#38a169; flex:1;" onclick="openBuyScrapModal()">📥 ซื้อแบตเก่าอย่างเดียว</button>
                 <button class="btn-primary" style="background:#dd6b20; flex:1; box-shadow:0 2px 4px rgba(221,107,32,0.3);" onclick="openSellScrapModal()">💰 ขายแบตเก่าทั้งหมด</button>
             </div>
         </div>
@@ -150,7 +153,7 @@
 
         <div class="summary-grid">
             <div class="stat-box bg-green">
-                <div>ยอดขายรวม (แบตใหม่ + ซาก)</div>
+                <div>ยอดขายรวม (แบตใหม่)</div>
                 <div class="stat-val" id="repIncome">0 ฿</div>
             </div>
             <div class="stat-box bg-red">
@@ -194,7 +197,10 @@
         <div class="card" style="overflow-x:auto">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                 <h2 style="margin:0; border:none; padding:0;">📝 ประวัติการเดินบัญชี</h2>
-                <button class="btn-quick-add" style="background:#3182ce; padding:8px 12px; font-size:14px;" onclick="openTxModal()">➕ เพิ่มประวัติย้อนหลัง</button>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-quick-add" style="background:#107c41; padding:8px 12px; font-size:14px;" onclick="exportTransactionsToExcel()">🟢 ส่งออกบัญชี Excel</button>
+                    <button class="btn-quick-add" style="background:#3182ce; padding:8px 12px; font-size:14px;" onclick="openTxModal()">➕ เพิ่มประวัติย้อนหลัง</button>
+                </div>
             </div>
             <table id="txTable"></table>
             <button id="editHistoryBtn" class="btn-primary" style="background:#4a5568;margin-top:20px" onclick="handleHistoryEditClick()">🔧 โหมดจัดการประวัติ (แก้ไข/ลบ)</button>
@@ -315,7 +321,7 @@
 
     <div id="buyScrapModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:100; align-items:center; justify-content:center; padding:15px; box-sizing:border-box;">
         <div class="card" style="width:100%; max-width:400px; text-align:center; margin:0; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-            <h2 style="color:#2f855a; margin-bottom:20px;">📥 รับซื้อซากแบตเตอรี่เก่า</h2>
+            <h2 style="color:#2f855a; margin-bottom:20px;">📥 รับซื้อแบตเตอรี่เก่า</h2>
             
             <div class="form-group" style="text-align:left;">
                 <label>ขนาดแบตเตอรี่:</label>
@@ -342,7 +348,7 @@
 
     <div id="sellScrapModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:100; align-items:center; justify-content:center; padding:15px; box-sizing:border-box;">
         <div class="card" style="width:100%; max-width:400px; text-align:center; margin:0; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-            <h2 style="color:#dd6b20; margin-bottom:10px; border-bottom:none;">💰 ขายซากแบตเตอรี่เก่า</h2>
+            <h2 style="color:#dd6b20; margin-bottom:10px; border-bottom:none;">💰 ขายแบตเตอรี่เก่า</h2>
             <p style="color:#718096; font-size:15px; margin-top:0; margin-bottom:20px;">มีแบตเตอรี่เก่าในคลังทั้งหมด: <strong id="ssTotalQty" style="color:#2d3748; font-size:24px;">0</strong> <strong>ลูก</strong></p>
             
             <div class="form-group" style="text-align:left;">
@@ -419,7 +425,7 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
         updateBrandButtons(); filterProducts(); filterBuyProducts(); loadStockData();
     });
 
-    function updateBrandButtons() { if(!db) return; let rs=db.exec("SELECT DISTINCT brand FROM products"), h=`<button class="size-btn ${invCurBrand==='ALL'?'active':''}" onclick="filterInvBrand('ALL')">ทุกยี่ห้อ</button>`; if(rs[0]) rs[0].values.forEach(([b])=>h+=`<button class="size-btn ${invCurBrand===b?'active':''}" onclick="filterInvBrand('${b}')">${b}</button>`); $('invBrandGrid').innerHTML=h; }
+    function updateBrandButtons() { if(!db) return; let rs=db.exec("SELECT DISTINCT brand FROM products"), h=`<button class="size-btn ${invCurBrand==='ALL'?'active':''}" onclick="filterInvBrand('ALL')">ทั้งหมด</button>`; if(rs[0]) rs[0].values.forEach(([b])=>h+=`<button class="size-btn ${invCurBrand===b?'active':''}" onclick="filterInvBrand('${b}')">${b}</button>`); $('invBrandGrid').innerHTML=h; }
     function filterInvSize(s) { invCurSize=s; $$('#invSizeGrid .size-btn').forEach(b=>b.classList.toggle('active',b.dataset.size===s)); loadStockData(); }
     function filterInvBrand(b) { invCurBrand=b; updateBrandButtons(); loadStockData(); }
 
@@ -427,8 +433,9 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
     function filterProducts() {
         const sz=$('sizeFilter').value, s=db.prepare(`SELECT id,brand,model,jis,stock,(brand||' '||model||' ('||jis||')') AS full FROM products${sz!=='ALL'?' WHERE size_cat=?':''}`);
         if(sz!=='ALL') s.bind([sz]); let o="", g=""; productMap={}; 
-        while(s.step()){ const r=s.getAsObject(); o+=`<option value="${r.full}">`; productMap[r.full]=r.id; g+=`<div class="model-btn" data-id="${r.id}" onclick="selectProduct(${r.id})"><div class="m-brand">${r.brand}</div><div class="m-name">${r.model} (${r.jis})</div><div style="font-size:12px;margin-top:4px;font-weight:bold;">${r.stock>0?`<span style="color:#38a169;">เหลือ ${r.stock} ลูก</span>`:`<span style="color:#e53e3e;">สินค้าหมด!</span>`}</div></div>`; } s.free();
-        $('saleProductList').innerHTML=o; $('modelGrid').innerHTML=g||'<div style="grid-column:span 2;text-align:center;padding:15px;color:#a0aec0">ไม่พบสินค้า</div>'; $('saleSearchInput').value=$('saleProduct').value=''; updateSalePrice();
+        while(s.step()){ const r=s.getAsObject(); o+=`<option value="${r.full}">`; productMap[r.full]=r.id; g+=`<div class="model-btn" data-id="${r.id}" onclick="selectProduct(${r.id})"><div class="m-brand">${r.brand}</div><div class="m-name">${r.model} <span style="color:#3182ce;">(${r.jis})</span></div><div style="font-size:12px;margin-top:4px;font-weight:bold;">${r.stock>0?`<span style="color:#38a169;">เหลือ ${r.stock} ลูก</span>`:`<span style="color:#e53e3e;">สินค้าหมด!</span>`}</div></div>`;
+        }
+            $('saleProductList').innerHTML=o; $('modelGrid').innerHTML=g||'<div style="grid-column:span 2;text-align:center;padding:15px;color:#a0aec0">ไม่พบสินค้า</div>'; $('saleSearchInput').value=$('saleProduct').value=''; updateSalePrice();
     }
     function selectProduct(id) { $('saleProduct').value=id; $$('#sale-tab .model-btn').forEach(b=>b.classList.toggle('active',b.dataset.id==id)); $('saleSearchInput').value=Object.keys(productMap).find(k=>productMap[k]===id)||''; updateSalePrice(); }
     function handleSearchInput(v) { const vl=v.toLowerCase(), id=productMap[v]||''; $('saleProduct').value=id; $$('#sale-tab .model-btn').forEach(b=>{ b.style.display=b.innerText.toLowerCase().includes(vl)?'flex':'none'; b.classList.toggle('active',b.dataset.id==id); }); updateSalePrice(); }
@@ -520,7 +527,7 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
         let dStr = getLocalDate();
         let txN = `${r.brand} ${r.model} (${r.jis})`;
         let saleAmt = manualPrice * q;
-        let salePrf = saleAmt - (r.cost * q);
+        let salePrf = saleAmt - (r.cost * q) - totalScrapDiscount;
 
         try { 
             run("BEGIN TRANSACTION;"); 
@@ -547,14 +554,16 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
 
         $('saleQty').value=1; $('saleSearchInput').value=$('saleProduct').value=''; $('hasTradeIn').checked=false; 
         $('tradeInList').innerHTML=''; toggleTradeInSection(); selectSize('ALL'); filterBuyProducts();
+        loadStockData(); loadDashboard(); loadScrapConfig(); filterProducts(); filterBuyProducts();
     }
 
     function selectBuySize(s) { $$('#buySizeGrid .size-btn').forEach(e=>e.classList.toggle('active',e.dataset.size===s)); $('buySizeFilter').value=s; filterBuyProducts(); }
     function filterBuyProducts() {
         const sz=$('buySizeFilter').value, s=db.prepare(`SELECT id,brand,model,jis,stock,(brand||' '||model||' ('||jis||')') AS full FROM products${sz!=='ALL'?' WHERE size_cat=?':''}`);
         if(sz!=='ALL') s.bind([sz]); let o="", g=""; buyProductMap={}; 
-        while(s.step()){ const r=s.getAsObject(); o+=`<option value="${r.full}">`; buyProductMap[r.full]=r.id; g+=`<div class="model-btn" data-id="${r.id}" onclick="selectBuyProduct(${r.id})"><div class="m-brand">${r.brand}</div><div class="m-name">${r.model} (${r.jis})</div><div style="font-size:12px;margin-top:4px;font-weight:bold;"><span style="color:#718096">มีอยู่ ${r.stock} ลูก</span></div></div>`; } s.free();
-        $('buyProductList').innerHTML=o; $('buyModelGrid').innerHTML=g||'<div style="grid-column:span 2;text-align:center;padding:15px;color:#a0aec0">ไม่พบสินค้า</div>'; $('buySearchInput').value=$('buyProduct').value=''; updateBuyCost();
+        while(s.step()){ const r=s.getAsObject(); o+=`<option value="${r.full}">`; buyProductMap[r.full]=r.id; g+=`<div class="model-btn" data-id="${r.id}" onclick="selectBuyProduct(${r.id})"><div class="m-brand">${r.brand}</div><div class="m-name">${r.model} <span style="color:#3182ce;">(${r.jis})</span></div><div style="font-size:12px;margin-top:4px;font-weight:bold;"><span style="color:#718096">มีอยู่ ${r.stock} ลูก</span></div></div>`;
+        }
+            $('buyProductList').innerHTML=o; $('buyModelGrid').innerHTML=g||'<div style="grid-column:span 2;text-align:center;padding:15px;color:#a0aec0">ไม่พบสินค้า</div>'; $('buySearchInput').value=$('buyProduct').value=''; updateBuyCost();
     }
     function selectBuyProduct(id) { $('buyProduct').value=id; $$('#buy-tab .model-btn').forEach(b=>b.classList.toggle('active',b.dataset.id==id)); $('buySearchInput').value=Object.keys(buyProductMap).find(k=>buyProductMap[k]===id)||''; updateBuyCost(); }
     function handleBuySearchInput(v) { const vl=v.toLowerCase(), id=buyProductMap[v]||''; $('buyProduct').value=id; $$('#buy-tab .model-btn').forEach(b=>{ b.style.display=b.innerText.toLowerCase().includes(vl)?'flex':'none'; b.classList.toggle('active',b.dataset.id==id); }); updateBuyCost(); }
@@ -581,6 +590,7 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
             run("COMMIT;"); saveToDevice(); 
         } catch(e) { run("ROLLBACK;"); return alert('❌ ผิดพลาด!'); }
         $('buyQty').value=1; $('buySearchInput').value=$('buyProduct').value=''; selectBuySize('ALL'); filterProducts();
+        loadStockData(); loadDashboard(); filterProducts(); filterBuyProducts();
     }
 
     function saveCurrentEditsToDB() { run("BEGIN TRANSACTION;"); $$('.edit-stock').forEach(e=>run("UPDATE products SET stock=? WHERE id=?",[parseInt(e.value)||0,e.dataset.id])); $$('.edit-cost').forEach(e=>run("UPDATE products SET cost=? WHERE id=?",[parseFloat(e.value)||0,e.dataset.id])); $$('.edit-price').forEach(e=>run("UPDATE products SET price=? WHERE id=?",[parseFloat(e.value)||0,e.dataset.id])); run("COMMIT;"); }
@@ -588,18 +598,69 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
     function addNewProduct() { const b=$('newBrand').value.trim(),m=$('newModel').value.trim(),j=$('newJIS').value.trim(); if(!b||!m||!j) return alert('กรอกข้อมูลไม่ครบ'); if(q1("SELECT id FROM products WHERE brand=? AND model=? AND jis=?",[b,m,j])) return alert('มีสินค้านี้แล้ว'); saveCurrentEditsToDB(); run("INSERT INTO products(brand,model,jis,size_cat,stock,cost,price) VALUES(?,?,?,?,?,?,?)",[b,m,j,$('newModelSize').value,parseInt($('newModelStock').value)||0,parseFloat($('newModelCost').value)||0,parseFloat($('newModelPrice').value)||0]); saveToDevice(); updateBrandButtons(); loadStockData(); filterProducts(); filterBuyProducts(); }
     function deleteProduct(id, n) { if(confirm(`⚠️ ลบ "${n}" ถาวร?`)){ saveCurrentEditsToDB(); run("DELETE FROM products WHERE id=?",[id]); saveToDevice(); updateBrandButtons(); loadStockData(); filterProducts(); filterBuyProducts(); } }
 
-    function loadStockData() {
-        if(!db) return; let q="SELECT id,brand,model,jis,size_cat,stock,cost,price FROM products WHERE 1=1"+(invCurSize!=='ALL'?` AND size_cat='${invCurSize}'`:'')+(invCurBrand!=='ALL'?` AND brand='${invCurBrand}'`:''), rs=db.exec(q), h=`<tr><th style="width:45%">รุ่นแบตเตอรี่ (ขนาด)</th><th style="width:15%;text-align:center">จำนวน</th><th style="width:20%;text-align:right">ราคาทุน</th><th style="width:20%;text-align:right">ราคาขาย</th></tr>`;
-        if(rs[0]) rs[0].values.forEach(([id,b,m,j,sz,st,c,p])=>{
-            let fn=`${b} ${m} (${j})`, del=isEditingInventory?`<span style="cursor:pointer;margin-left:8px;padding:2px 6px;background:#f56565;color:white;border-radius:4px;font-size:12px" onclick="deleteProduct(${id},'${fn.replace(/'/g,"\\'")}')">🗑️ ลบ</span>`:'';
-            h+=`<tr><td><strong>${fn}</strong> <span style="font-size:12px;color:#718096">(${sz})</span>${del}</td><td style="text-align:center;font-weight:bold;color:${!isEditingInventory&&st<=2?'#e53e3e':'#2d3748'}">${isEditingInventory?`<input type="number" class="edit-stock" data-id="${id}" value="${st}" style="width:100%;text-align:center;padding:4px;box-sizing:border-box">`:st}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-cost" data-id="${id}" value="${c}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${c.toLocaleString()} ฿`}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-price" data-id="${id}" value="${p}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${p.toLocaleString()} ฿`}</td></tr>`;
-        });
-        if(isEditingInventory) h+=`<tr style="background:#ebf8ff"><td colspan="4"><div style="font-weight:bold;margin-bottom:6px;color:#2b6cb0">➕ เพิ่มรุ่นใหม่</div><div style="display:flex;gap:4px;margin-bottom:4px"><input type="text" id="newBrand" placeholder="ยี่ห้อ" style="flex:1.5;padding:6px;box-sizing:border-box"><input type="text" id="newModel" placeholder="รุ่น" style="flex:2;padding:6px;box-sizing:border-box"><input type="text" id="newJIS" placeholder="JIS" style="flex:2;padding:6px;box-sizing:border-box"></div><div style="display:flex;gap:4px"><select id="newModelSize" style="flex:1.5;padding:6px;box-sizing:border-box"><option>D31</option><option>LN4</option><option>D26</option><option>LN3</option><option>LN2</option><option>B24</option><option>B19</option><option>A19</option><option>N100</option><option>N120</option><option>N150</option></select><input type="number" id="newModelStock" placeholder="จำนวน" style="flex:1;padding:6px;text-align:center;box-sizing:border-box"><input type="number" id="newModelCost" placeholder="ทุน" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"><input type="number" id="newModelPrice" placeholder="ขาย" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"></div><button class="btn-quick-add" style="background:#3182ce;padding:10px;width:100%;margin-top:8px" onclick="addNewProduct()">➕ บันทึก</button></td></tr>`;
-        $('newStockTable').innerHTML=h;
+ function loadStockData() {
+    if(!db) return; 
+    let q = "SELECT id,brand,model,jis,size_cat,stock,cost,price FROM products WHERE 1=1";
+    let p = [];
+    if(invCurSize !== 'ALL') { q += " AND size_cat=?"; p.push(invCurSize); }
+    if(invCurBrand !== 'ALL') { q += " AND brand=?"; p.push(invCurBrand); }
+    
+    let s = db.prepare(q);
+    s.bind(p);
+    
+    let h = `<tr><th style="width:45%">รุ่นแบตเตอรี่ (ขนาด)</th><th style="width:15%;text-align:center">จำนวน</th><th style="width:20%;text-align:right">ราคาทุน</th><th style="width:20%;text-align:right">ราคาขาย</th></tr>`;
+    
+    while(s.step()) {
+        let [id,b,m,j,sz,st,c,pr] = s.get();
+        let fn=`${b} ${m} <span style="color:#3182ce;">(${j})</span>`, del=isEditingInventory?`<span style="cursor:pointer;margin-left:8px;padding:2px 6px;background:#f56565;color:white;border-radius:4px;font-size:12px" onclick="deleteProduct(${id},'${fn.replace(/'/g,"\'")}')">🗑️ ลบ</span>`:'';
+        h+=`<tr><td><strong>${fn}</strong> <span style="font-size:12px;color:#718096">(${sz})</span>${del}</td><td style="text-align:center;font-weight:bold;color:${!isEditingInventory&&st<=2?'#e53e3e':'#2d3748'}">${isEditingInventory?`<input type="number" class="edit-stock" data-id="${id}" value="${st}" style="width:100%;text-align:center;padding:4px;box-sizing:border-box">`:st}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-cost" data-id="${id}" value="${c}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${c.toLocaleString()} ฿`}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-price" data-id="${id}" value="${pr}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${pr.toLocaleString()} ฿`}</td></tr>`;
+    }
+    s.free();
+    
+    if(isEditingInventory) h+=`<tr style="background:#ebf8ff"><td colspan="4"><div style="font-weight:bold;margin-bottom:6px;color:#2b6cb0">➕ เพิ่มรุ่นใหม่</div><div style="display:flex;gap:4px;margin-bottom:4px"><input type="text" id="newBrand" placeholder="ยี่ห้อ" style="flex:1.5;padding:6px;box-sizing:border-box"><input type="text" id="newModel" placeholder="รุ่น" style="flex:2;padding:6px;box-sizing:border-box"><input type="text" id="newJIS" placeholder="JIS" style="flex:2;padding:6px;box-sizing:border-box"></div><div style="display:flex;gap:4px"><select id="newModelSize" style="flex:1.5;padding:6px;box-sizing:border-box"><option>D31</option><option>LN4</option><option>D26</option><option>LN3</option><option>LN2</option><option>B24</option><option>B19</option><option>A19</option><option>N100</option><option>N120</option><option>N150</option></select><input type="number" id="newModelStock" placeholder="จำนวน" style="flex:1;padding:6px;text-align:center;box-sizing:border-box"><input type="number" id="newModelCost" placeholder="ทุน" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"><input type="number" id="newModelPrice" placeholder="ขาย" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"></div><button class="btn-quick-add" style="background:#3182ce;padding:10px;width:100%;margin-top:8px" onclick="addNewProduct()">➕ บันทึก</button></td></tr>`;
+    $('newStockTable').innerHTML=h;
+}
+
+    function handleScrapInventoryEditClick() { 
+        const b=$('editScrapBtn'); 
+        if(!isEditingScrap){ 
+            isEditingScrap=true; 
+            b.textContent="💾 บันทึก"; 
+            b.style.background="#48bb78"; 
+            loadScrapConfig(); 
+        } else { 
+            run("BEGIN TRANSACTION;"); 
+            // 1. อัปเดตราคาเทิร์นเดิม
+            $$('.edit-scrap-discount').forEach(e=>run("UPDATE scrap_categories SET default_discount=? WHERE size_name=?",[parseFloat(e.value)||0,e.dataset.size])); 
+            // 2. เพิ่มลอจิกการอัปเดตจำนวนสต็อกแบตเก่าแต่ละขนาด
+            $$('.edit-scrap-stock').forEach(e=>run("UPDATE scrap_categories SET stock=? WHERE size_name=?",[parseInt(e.value)||0,e.dataset.size])); 
+            run("COMMIT;"); 
+            saveToDevice(); 
+            isEditingScrap=false; 
+            b.textContent="🔧 แก้ไขจำนวนและราคาเทิร์น"; 
+            b.style.background="#4a5568"; 
+            loadScrapConfig(); 
+            loadDashboard(); // รีเฟรชแดชบอร์ดเผื่อมีการปรับตัวเลขจำนวนซากส่งผลต่อรายงาน
+        } 
     }
 
-    function handleScrapInventoryEditClick() { const b=$('editScrapBtn'); if(!isEditingScrap){ isEditingScrap=true; b.textContent="💾 บันทึกส่วนลด"; b.style.background="#48bb78"; loadScrapConfig(); } else { run("BEGIN TRANSACTION;"); $$('.edit-scrap-discount').forEach(e=>run("UPDATE scrap_categories SET default_discount=? WHERE size_name=?",[parseFloat(e.value)||0,e.dataset.size])); run("COMMIT;"); saveToDevice(); isEditingScrap=false; b.textContent="🔧 แก้ไขส่วนลดมาตรฐาน"; b.style.background="#4a5568"; loadScrapConfig(); } }
-    function loadScrapConfig() { if(!db) return; let rs=db.exec("SELECT size_name,stock,default_discount FROM scrap_categories"), h=`<tr><th>ขนาดแบตเก่า</th><th>จำนวนที่มี</th><th>ส่วนลดมาตรฐาน</th></tr>`; if(rs[0]) rs[0].values.forEach(([s,st,d])=>h+=`<tr><td style="font-weight:bold">${s}</td><td style="color:#2f855a;font-weight:bold">${st} ลูก</td><td style="font-weight:bold">${isEditingScrap?`<input type="number" class="edit-scrap-discount" data-size="${s}" value="${d}" style="width:100px;padding:4px">`:`${d.toLocaleString()} ฿`}</td></tr>`); $('oldStockTable').innerHTML=h; }
+    function loadScrapConfig() { 
+        if(!db) return; 
+        let rs=db.exec("SELECT size_name,stock,default_discount FROM scrap_categories"), 
+            h=`<tr><th>ขนาดแบตเก่า</th><th style="text-align:center; width:30%;">จำนวน</th><th>ราคาเทิร์น</th></tr>`; 
+        if(rs[0]) rs[0].values.forEach(([s,st,d])=>{
+            h+=`<tr>
+                <td style="font-weight:bold">${s}</td>
+                <td style="color:#2f855a;font-weight:bold;text-align:center;">
+                    ${isEditingScrap?`<input type="number" class="edit-scrap-stock" data-size="${s}" value="${st}" style="width:80px;text-align:center;padding:4px;box-sizing:border-box;"> ลูก`:`${st} ลูก`}
+                </td>
+                <td style="font-weight:bold">
+                    ${isEditingScrap?`<input type="number" class="edit-scrap-discount" data-size="${s}" value="${d}" style="width:100px;padding:4px;box-sizing:border-box;">`:`${d.toLocaleString()} ฿`}
+                </td>
+            </tr>`;
+        }); 
+        $('oldStockTable').innerHTML=h; 
+    }
 
     function handleHistoryEditClick() { 
         const b=$('editHistoryBtn'); 
@@ -610,30 +671,38 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
     }
     
     function deleteTransaction(id) {
-        if(!confirm('⚠️ ลบประวัตินี้ พร้อมคืนค่าสต็อก?')) return;
-        const tx=q1("SELECT type,model_name,qty FROM transactions WHERE id=?",[id]); if(!tx) return;
-        run("BEGIN TRANSACTION;"); 
-        
-        let pure = tx.model_name;
-        if (pure.startsWith('รับเทิร์นแบตเก่า')) {
-            let m = pure.match(/\((.+)\)/);
-            if(m) {
-                let parts = m[1].split(', ');
-                parts.forEach(part => {
-                    let pm = part.match(/(.+)x(\d+)/);
-                    if(pm) run("UPDATE scrap_categories SET stock=stock-? WHERE size_name=?", [parseInt(pm[2])||0, pm[1]]);
-                });
-            }
-        } else if (pure.startsWith('ขายแบตเตอรี่เก่า')) {
-            // ไม่ต้องคืนค่าอะไรเพราะขายทิ้งเป็นศูนย์ไปแล้ว
-        } else {
-            const p=q1("SELECT id FROM products WHERE (brand||' '||model||' ('||jis||')') = ?",[pure]);
-            if(p) run(`UPDATE products SET stock=stock${tx.type==='รายรับ'?'+':'-'}? WHERE id=?`,[tx.qty,p.id]);
+    if(!confirm('⚠️ ลบประวัตินี้ พร้อมคืนค่าสต็อก?')) return;
+    const tx=q1("SELECT type,model_name,qty FROM transactions WHERE id=?",[id]); if(!tx) return;
+    run("BEGIN TRANSACTION;"); 
+    
+    let pure = tx.model_name;
+    if (pure.startsWith('รับเทิร์นแบตเก่า')) {
+        let m = pure.match(/\((.+)\)/);
+        if(m) {
+            let parts = m[1].split(', ');
+            parts.forEach(part => {
+                let pm = part.match(/(.+)x(\d+)/);
+                if(pm) run("UPDATE scrap_categories SET stock=stock-? WHERE size_name=?", [parseInt(pm[2])||0, pm[1].trim()]);
+            });
         }
-        
-        run("DELETE FROM transactions WHERE id=?",[id]); 
-        run("COMMIT;"); saveToDevice(); loadDashboard(); loadStockData(); filterProducts(); filterBuyProducts(); loadScrapConfig(); alert('✅ ลบสำเร็จ!');
+    } else if (pure.startsWith('ขายแบตเตอรี่เก่า')) {
+        // ดึงสัดส่วนขนาดแบตเก่ากลับคืนเข้าคลัง (ย้อนกลับการขายซาก)
+        let m = pure.match(/\((.+)\)/);
+        if(m && m[1].includes('x')) {
+            let parts = m[1].split(', ');
+            parts.forEach(part => {
+                let pm = part.match(/(.+)x(\d+)/);
+                if(pm) run("UPDATE scrap_categories SET stock=stock+? WHERE size_name=?", [parseInt(pm[2])||0, pm[1].trim()]);
+            });
+        }
+    } else {
+        const p=q1("SELECT id FROM products WHERE (brand||' '||model||' ('||jis||')') = ?",[pure]);
+        if(p) run(`UPDATE products SET stock=stock${tx.type==='รายรับ'?'+':'-'}? WHERE id=?`,[tx.qty,p.id]);
     }
+    
+    run("DELETE FROM transactions WHERE id=?",[id]); 
+    run("COMMIT;"); saveToDevice(); loadDashboard(); loadStockData(); filterProducts(); filterBuyProducts(); loadScrapConfig(); alert('✅ ลบสำเร็จ!');
+}
 
     let reportMode = 'monthly';
 
@@ -695,8 +764,9 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
                 }
             } else if (ro.type === 'รายรับ' && ro.model_name.startsWith('ขายแบตเตอรี่เก่า')) {
                 itemDisplay = `<strong style="color:#dd6b20;">💰 ${ro.model_name}</strong>`;
-            } else {
-                itemDisplay = `<strong>${ro.model_name}</strong> (x${ro.qty})`;
+          } else {
+    let coloredModelName = ro.model_name.replace(/\((.*?)\)/, '<span style="color:#3182ce;">($1)</span>');
+    itemDisplay = `<strong>${coloredModelName}</strong> (x${ro.qty})`;
                 if (ro.type === 'รายรับ') {
                     totalPureProfit += ro.net_profit;
                     
@@ -737,9 +807,10 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
         if(bestLimit !== 'ALL') sortedSales = sortedSales.slice(0, parseInt(bestLimit));
         
         let bh="<tr><th>อันดับ</th><th>รุ่นแบต</th><th class='text-right'>ขายได้</th></tr>", r=1;
-        sortedSales.forEach(([modelName, qty]) => {
-            bh+=`<tr><td>${r++}</td><td>${modelName}</td><td class='text-right' style='font-weight:bold;color:#3182ce'>${qty} ลูก</td></tr>`;
-        });
+       sortedSales.forEach(([modelName, qty]) => {
+    let coloredModel = modelName.replace(/\((.*?)\)/, '<span style="color:#3182ce;">($1)</span>');
+    bh+=`<tr><td>${r++}</td><td>${coloredModel}</td><td class='text-right' style='font-weight:bold;color:#3182ce'>${qty} ลูก</td></tr>`;
+});
         $('bestSellerTable').innerHTML=sortedSales.length>0?bh:`${bh}<tr><td colspan='3' style='text-align:center;color:#a0aec0'>ไม่มีข้อมูลการขาย</td></tr>`;
 
         // 2. ตารางแบตใหม่ พร้อมกำไรด้านล่าง
@@ -767,7 +838,7 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
         if(sortedScrap.length === 0) sch += `<tr><td colspan='2' style='text-align:center;color:#a0aec0;padding:15px;'>ไม่มีข้อมูลการเทิร์นแบตเตอรี่</td></tr>`;
         
         sch += `<tr style="background:#f0fff4"><td style="text-align:right"><strong>รวมจำนวนทั้งหมด:</strong></td><td class="text-right" style="font-weight:bold; color:#276749; font-size:16px;">${sumScrap} ลูก</td></tr>`;
-        sch += `<tr style="background:#fff5f5; border-top:2px solid #e53e3e;"><td style="text-align:right"><strong>🔄 จ่ายเงินซื้อซากเข้าคลัง:</strong></td><td class="text-right" style="font-weight:bold; color:#c53030; font-size:16px;">-${totalScrapDiscount.toLocaleString()} ฿</td></tr>`;
+        sch += `<tr style="background:#fff5f5; border-top:2px solid #e53e3e;"><td style="text-align:right"><strong>🔄 จ่ายเงินซื้อแบตเก่าเข้าคลัง:</strong></td><td class="text-right" style="font-weight:bold; color:#c53030; font-size:16px;">-${totalScrapDiscount.toLocaleString()} ฿</td></tr>`;
         $('scrapSummaryTable').innerHTML = sch;
     }
 
@@ -795,7 +866,7 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
             run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,0)", [getLocalDate(),'รายจ่าย', `รับเทิร์นแบตเก่า (${sz}x${qty})`, qty, amt]);
             run("UPDATE scrap_categories SET stock=stock+? WHERE size_name=?", [qty, sz]);
             run("COMMIT;"); saveToDevice();
-            closeBuyScrapModal(); loadScrapConfig(); loadDashboard(); alert('✅ บันทึกรายจ่ายรับเทิร์นซากสำเร็จ');
+            closeBuyScrapModal(); loadScrapConfig(); loadDashboard(); alert('✅ บันทึกรายจ่ายรับซื้อแบตเก่าสำเร็จ');
         } catch(e) { run("ROLLBACK;"); alert('❌ เกิดข้อผิดพลาด'); }
     }
 
@@ -815,17 +886,23 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
         let amt = parseFloat($('ssAmount').value);
         if(!isNaN(amt) && amt > 0) { $('ssSumAmount').textContent = amt.toLocaleString(); $('ssSummaryBox').style.display = 'block'; } else { $('ssSummaryBox').style.display = 'none'; }
     }
-    function confirmSellScrap() {
-        let amt = parseFloat($('ssAmount').value);
-        if(isNaN(amt) || amt <= 0) return alert('⚠️ กรุณาระบุยอดเงินที่ขายได้อย่างถูกต้อง');
-        try {
-            run("BEGIN TRANSACTION;");
-            run("UPDATE scrap_categories SET stock=0");
-            run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,?)", [getLocalDate(), 'รายรับ', `ขายแบตเตอรี่เก่า (${currentTotalScrap}) ลูก`, currentTotalScrap, amt, amt]);
-            run("COMMIT;"); saveToDevice();
-            closeSellScrapModal(); loadScrapConfig(); loadDashboard(); alert('✅ บันทึกการขายแบตเก่าเรียบร้อยแล้ว!');
-        } catch(e) { run("ROLLBACK;"); alert('❌ เกิดข้อผิดพลาด'); }
-    }
+function confirmSellScrap() {
+    let amt = parseFloat($('ssAmount').value);
+    if(isNaN(amt) || amt <= 0) return alert('⚠️ กรุณาระบุยอดเงินที่ขายได้อย่างถูกต้อง');
+    try {
+        let rs = db.exec("SELECT size_name, stock FROM scrap_categories WHERE stock > 0");
+        let scrapData = [];
+        if(rs[0]) rs[0].values.forEach(([sz, st]) => scrapData.push(`${sz}x${st}`));
+        let detailStr = scrapData.length > 0 ? scrapData.join(', ') : `${currentTotalScrap} ลูก`;
+        
+        run("BEGIN TRANSACTION;");
+        run("UPDATE scrap_categories SET stock=0");
+        // ฝังข้อมูลแยกรุ่น (detailStr) ไว้ใน model_name เพื่อง่ายต่อการคืนค่าถ้ายกเลิก
+        run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,?)", [getLocalDate(), 'รายรับ', `ขายแบตเตอรี่เก่า (${detailStr})`, currentTotalScrap, amt, amt]);
+        run("COMMIT;"); saveToDevice();
+        closeSellScrapModal(); loadScrapConfig(); loadDashboard(); alert('✅ บันทึกการขายแบตเก่าเรียบร้อยแล้ว!');
+    } catch(e) { run("ROLLBACK;"); alert('❌ เกิดข้อผิดพลาด'); }
+}
 
     // ==========================================
     // ฟังก์ชันสำหรับแก้ไข/เพิ่มประวัติย้อนหลัง (Modal)
@@ -900,11 +977,11 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
                 if(oldTx) run(`UPDATE products SET stock=stock${oldTx.type==='รายรับ'?'+':'-'}? WHERE id=?`, [oldTx.qty, pId]);
                 
                 run(`UPDATE products SET stock=stock${type==='รายรับ'?'-':'+'}? WHERE id=?`, [qty, pId]);
-                let netProfit = type === 'รายรับ' ? amount - (p.cost * qty) : 0;
+                let netProfit = type === 'รายรับ' ? amount - (p.cost * qty) - totalScrapDiscount : 0;
                 run("UPDATE transactions SET date=?, type=?, model_name=?, qty=?, total_amount=?, net_profit=? WHERE id=?", [dDate, type, txN, qty, Math.abs(amount), netProfit, id]);
             } else { 
                 run(`UPDATE products SET stock=stock${type==='รายรับ'?'-':'+'}? WHERE id=?`, [qty, pId]);
-                let netProfit = type === 'รายรับ' ? amount - (p.cost * qty) : 0;
+                let netProfit = type === 'รายรับ' ? amount - (p.cost * qty) - totalScrapDiscount : 0;
                 run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,?)", [dDate, type, txN, qty, Math.abs(amount), netProfit]);
                 
                 if(scrapData.length > 0) {
@@ -917,11 +994,97 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
         } catch(e) { run("ROLLBACK;"); alert('❌ เกิดข้อผิดพลาด'); console.error(e); }
     }
 
-   function exportDatabase() { const txCount=q1("SELECT COUNT(*) AS c FROM transactions")?.c||0; const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([db.export()],{type:"application/octet-stream"})); a.download=`Backup_${getLocalDate()}_(${txCount}).db`; a.click(); }
+function exportTransactionsToExcel() {
+        if(!db) return alert('ฐานข้อมูลไม่พร้อมใช้งาน');
+        let dCond = ""; let params = [];
+        if (reportMode === 'monthly') {
+            dCond = "date LIKE ?"; params = [`${$('reportYear').value}-${$('reportMonth').value}-%`];
+        } else if (reportMode === 'custom') {
+            const sd = $('startDate').value; const ed = $('endDate').value;
+            if (sd && ed) { dCond = "date BETWEEN ? AND ?"; params = [sd, ed]; } 
+            else if (sd) { dCond = "date >= ?"; params = [sd]; } 
+            else if (ed) { dCond = "date <= ?"; params = [ed]; } 
+            else { dCond = "1=1"; params = []; }
+        } else { dCond = "1=1"; params = []; }
+
+        let st = db.prepare(`SELECT date, type, model_name, qty, total_amount, net_profit FROM transactions WHERE ${dCond} ORDER BY date DESC, id DESC`);
+        st.bind(params);
+
+        let csvContent = "\uFEFF"; // UTF-8 BOM for Thai encoding in Excel
+        csvContent += "วันที่,ประเภทการเดินบัญชี,รายการแบตเตอรี่/กิจกรรม,จำนวน (ลูก),ยอดเงินรวม (บาท),กำไรสุทธิเฉพาะบิล (บาท)\n";
+
+        while(st.step()) {
+            let row = st.get();
+            let dParts = row[0].split('-');
+            let thaiYear = parseInt(dParts[0]) + 543;
+            let formattedDate = `${dParts[2]}/${dParts[1]}/${thaiYear}`;
+            let type = row[1];
+            let modelName = row[2].replace(/"/g, '""');
+            let qty = row[3];
+            let totalAmount = row[4];
+            let netProfit = row[5];
+            csvContent += `"${formattedDate}","${type}","${modelName}",${qty},${totalAmount},${netProfit}\n`;
+        }
+        st.free();
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        let filename = `รายงานบัญชีร้านแบตเตอรี่_${reportMode}`;
+        if(reportMode === 'monthly') filename += `_${$('reportYear').value}_${$('reportMonth').value}`;
+        link.setAttribute("download", `${filename}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function exportStockToExcel() {
+        if(!db) return alert('ฐานข้อมูลไม่พร้อมใช้งาน');
+        let q = "SELECT brand, model, jis, size_cat, stock, cost, price FROM products WHERE 1=1";
+        let p = [];
+        if(invCurSize !== 'ALL') { q += " AND size_cat=?"; p.push(invCurSize); }
+        if(invCurBrand !== 'ALL') { q += " AND brand=?"; p.push(invCurBrand); }
+        
+        let s = db.prepare(q);
+        s.bind(p);
+        
+        let csvContent = "\uFEFF"; // UTF-8 BOM
+        csvContent += "ยี่ห้อ,รุ่นสินค้า,รหัส JIS,ขนาดกลุ่มแบตเตอรี่,จำนวนคงเหลือในคลัง (ลูก),ราคาทุน (บาท),ราคาขาย (บาท)\n";
+        
+        while(s.step()) {
+            let row = s.get();
+            csvContent += `"${row[0]}","${row[1]}","${row[2]}","${row[3]}",${row[4]},${row[5]},${row[6]}\n`;
+        }
+        s.free();
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `รายงานสต็อกคงเหลือ_${invCurSize}_${invCurBrand}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+   function exportDatabase() { 
+    const txCount=q1("SELECT COUNT(*) AS c FROM transactions")?.c||0; 
+    const a=document.createElement("a"); 
+    const url = URL.createObjectURL(new Blob([db.export()],{type:"application/octet-stream"}));
+    a.href = url;
+    a.download=`Backup_${getLocalDate()}_(${txCount}).db`; 
+    a.click(); 
+    
+    // ตั้งหน่วงเวลา 1 วินาทีเพื่อให้เบราว์เซอร์ดาวน์โหลดเสร็จก่อนค่อยลบทิ้ง คืน Ram 100%
+    setTimeout(() => URL.revokeObjectURL(url), 1000); 
+}
    function importDatabase() { const f=$('importFile').files[0]; if(!f) return; const r=new FileReader(); r.onload=function(){ initSqlJs({locateFile:fl=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${fl}`}).then(async SQL=>{ try{ db=new SQL.Database(new Uint8Array(this.result)); await saveToDevice(); filterProducts(); filterBuyProducts(); updateBrandButtons(); alert('📥 สำเร็จ!'); switchTab('sale-tab'); }catch(e){ alert('❌ ไฟล์ไม่ถูกต้อง'); }finally{ $('importFile').value=''; } }); }; r.readAsArrayBuffer(f); }
-   async function resetDatabase() { if(confirm('⚠️ ลบข้อมูลทั้งหมด?\\nกด "ตกลง" เพื่อดาวน์โหลด Backup ก่อน')) return exportDatabase(), alert('📥 โหลดแล้ว กดรีเซ็ตอีกครั้งเพื่อลบ'); if(prompt('พิมพ์ "RESET" เพื่อยืนยัน:')==='RESET'){ try{ await idbReq('readwrite','delete'); alert('✅ รีเซ็ตแล้ว'); location.reload(); }catch(e){} } }
+   async function resetDatabase() { if(confirm('⚠️ ลบข้อมูลทั้งหมด?\nกด "ตกลง" เพื่อดาวน์โหลด Backup ก่อน')) return exportDatabase(), alert('📥 โหลดแล้ว กดรีเซ็ตอีกครั้งเพื่อลบ'); if(prompt('พิมพ์ "RESET" เพื่อยืนยัน:')==='RESET'){ try{ await idbReq('readwrite','delete'); alert('✅ รีเซ็ตแล้ว'); location.reload(); }catch(e){} } }
    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-   function checkBackupCounter() { let count=parseInt(localStorage.getItem('txSaveCount')||'0'); count++; if(count>=5){ setTimeout(()=>{ if(confirm('📢 มีการบันทึกข้อมูลใหม่ครบ 5 รายการแล้ว! แนะนำให้ดาวน์โหลดไฟล์สำรอง (.db) เก็บไว้\\n\\nต้องการเซฟตอนนี้เลยไหม?')) exportDatabase(); localStorage.setItem('txSaveCount','0'); },500); } else localStorage.setItem('txSaveCount',count); }
+   function checkBackupCounter() { let count=parseInt(localStorage.getItem('txSaveCount')||'0'); count++; if(count>=5){ setTimeout(()=>{ if(confirm('📢 มีการบันทึกข้อมูลใหม่ครบ 5 รายการแล้ว! แนะนำให้ดาวน์โหลดไฟล์สำรอง (.db) เก็บไว้\n\nต้องการเซฟตอนนี้เลยไหม?')) exportDatabase(); localStorage.setItem('txSaveCount','0'); },500); } else localStorage.setItem('txSaveCount',count); }
 function runSystemSelfTest() {
     const btn = document.activeElement;
     const originalText = btn.textContent;
@@ -1001,7 +1164,7 @@ function runSystemSelfTest() {
             assert(case2Scrap.stock === 1, `คลังแบตเตอรี่เก่าขนาด D31 ต้องเพิ่มสะสมเป็น ${case2Scrap.stock} ลูก`);
 
             let case2TxExpense = q1("SELECT total_amount FROM transactions WHERE type='รายจ่าย' ORDER BY id DESC LIMIT 1");
-            assert(case2TxExpense.total_amount === 500, `บันทึกบัญชีแยกบรรทัดเป็นค่าใช้จ่ายรับซื้อซากสำเร็จ (${case2TxExpense.total_amount} ฿)`);
+            assert(case2TxExpense.total_amount === 500, `บันทึกบัญชีแยกบรรทัดเป็นค่าใช้จ่ายรับซื้อแบตเก่าสำเร็จ (${case2TxExpense.total_amount} ฿)`);
 
             // ==========================================================
             // TEST CASE 3: ตรวจสอบความถูกต้องของการลบประวัติย้อนหลัง (Rollback Integrity)
@@ -1013,10 +1176,16 @@ function runSystemSelfTest() {
             assert(case3Prod.stock === 8, `ระบบคืนค่าสต็อกแบตเตอรี่ใหม่กลับเข้าคลังถูกต้องหลังยกเลิกบิล`);
 
             // แสดงรายงานผลลัพธ์ผ่านกล่องข้อความ
-            realAlert(`🎉 ผลการทดสอบเชิงลึก (In-App Test) ผ่านฉลุย 100%!\nผ่านการตรวจสอบย่อยทั้งหมด ${passCount} เงื่อนไข\n\n` + testLogs.join("\n"));
+            realAlert(`🎉 ผลการทดสอบเชิงลึก (In-App Test) ผ่านฉลุย 100%!
+ผ่านการตรวจสอบย่อยทั้งหมด ${passCount} เงื่อนไข
+
+` + testLogs.join("
+"));
 
         } catch (error) {
-            realAlert(`🚨 ตรวจพบจุดพังในระบบ (Regression Fault)!\n\nจุดที่พบปัญหา: ${error.message}`);
+            realAlert(`🚨 ตรวจพบจุดพังในระบบ (Regression Fault)!
+
+จุดที่พบปัญหา: ${error.message}`);
             console.error(error);
         } finally {
             // 3. คืนค่าระบบสภาพแวดล้อมจริงกลับคืนสู่ตัวแอปพลิเคชันหลัก
