@@ -250,6 +250,18 @@
                 </button>
             </div>
         </div>
+        <div style="background: #f3e8ff; border: 1px solid #d6bcfa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+    <div style="display:flex; align-items:center; margin-bottom: 10px;">
+        <span style="font-size:24px; margin-right:10px;">🧪</span>
+        <div>
+            <div style="font-weight:bold; color:#553c9a;">ระบบตรวจสภาพตัวเอง (In-App Test Runner)</div>
+            <div style="font-size:13px; color:#6b46c1;">รันโมเดลทดสอบเพื่อพิสูจน์ความแม่นยำของระบบบัญชีและสต็อก (ข้อมูลจริงปลอดภัย 100%)</div>
+        </div>
+    </div>
+    <button class="btn-primary" style="background:#805ad5; box-shadow: 0 2px 4px rgba(128,90,213,0.3);" onclick="runSystemSelfTest()">
+        🚀 เริ่มต้นรัน Test Cases อัตโนมัติ
+    </button>
+</div>
     </div>
     
     <div id="txModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:100; align-items:center; justify-content:center; padding:15px; box-sizing:border-box;">
@@ -356,7 +368,7 @@
 <script>
     const $ = id => document.getElementById(id), $$ = sel => document.querySelectorAll(sel);
     let db, isEditingInventory=false, isEditingScrap=false, isEditingHistory=false, productMap={}, buyProductMap={}, invCurSize='ALL', invCurBrand='ALL';
-
+const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
     const idbReq = (m, act, d) => new Promise((res, rej) => {
         const req = indexedDB.open('BatteryPwaDB_v3', 1);
         req.onupgradeneeded = e => { if(!e.target.result.objectStoreNames.contains('sqlite_store')) e.target.result.createObjectStore('sqlite_store'); };
@@ -505,7 +517,7 @@
             });
         }
 
-        let dStr = new Date().toISOString().split('T')[0];
+        let dStr = getLocalDate();
         let txN = `${r.brand} ${r.model} (${r.jis})`;
         let saleAmt = manualPrice * q;
         let salePrf = saleAmt - (r.cost * q);
@@ -565,7 +577,7 @@
         try { 
             run("BEGIN TRANSACTION;"); 
             run("UPDATE products SET stock=stock+? WHERE id=?",[q,pId]); 
-            run(`INSERT INTO transactions(date,type,model_name,qty,total_amount,net_profit) VALUES(?, 'รายจ่าย', ?, ?, ?, 0)`,[new Date().toISOString().split('T')[0],`${r.brand} ${r.model} (${r.jis})`,q,manualCost*q]); 
+            run(`INSERT INTO transactions(date,type,model_name,qty,total_amount,net_profit) VALUES(?, 'รายจ่าย', ?, ?, ?, 0)`,[getLocalDate(),`${r.brand} ${r.model} (${r.jis})`,q,manualCost*q]); 
             run("COMMIT;"); saveToDevice(); 
         } catch(e) { run("ROLLBACK;"); return alert('❌ ผิดพลาด!'); }
         $('buyQty').value=1; $('buySearchInput').value=$('buyProduct').value=''; selectBuySize('ALL'); filterProducts();
@@ -780,7 +792,7 @@
         if(qty <= 0 || amt < 0) return alert('⚠️ ข้อมูลไม่ถูกต้อง');
         try {
             run("BEGIN TRANSACTION;");
-            run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,0)", [new Date().toISOString().split('T')[0], 'รายจ่าย', `รับเทิร์นแบตเก่า (${sz}x${qty})`, qty, amt]);
+            run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,0)", [getLocalDate(),'รายจ่าย', `รับเทิร์นแบตเก่า (${sz}x${qty})`, qty, amt]);
             run("UPDATE scrap_categories SET stock=stock+? WHERE size_name=?", [qty, sz]);
             run("COMMIT;"); saveToDevice();
             closeBuyScrapModal(); loadScrapConfig(); loadDashboard(); alert('✅ บันทึกรายจ่ายรับเทิร์นซากสำเร็จ');
@@ -809,7 +821,7 @@
         try {
             run("BEGIN TRANSACTION;");
             run("UPDATE scrap_categories SET stock=0");
-            run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,?)", [new Date().toISOString().split('T')[0], 'รายรับ', `ขายแบตเตอรี่เก่า (${currentTotalScrap}) ลูก`, currentTotalScrap, amt, amt]);
+            run("INSERT INTO transactions(date, type, model_name, qty, total_amount, net_profit) VALUES(?,?,?,?,?,?)", [getLocalDate(), 'รายรับ', `ขายแบตเตอรี่เก่า (${currentTotalScrap}) ลูก`, currentTotalScrap, amt, amt]);
             run("COMMIT;"); saveToDevice();
             closeSellScrapModal(); loadScrapConfig(); loadDashboard(); alert('✅ บันทึกการขายแบตเก่าเรียบร้อยแล้ว!');
         } catch(e) { run("ROLLBACK;"); alert('❌ เกิดข้อผิดพลาด'); }
@@ -851,7 +863,7 @@
             $('txModalTradeInSection').style.display = 'none';
         } else {
             $('txModalTitle').innerHTML = "➕ เพิ่มประวัติย้อนหลัง"; $('txModalId').value = "";
-            $('txModalDate').value = new Date().toISOString().split('T')[0]; $('txModalType').value = 'รายรับ';
+            $('txModalDate').value = getLocalDate(); $('txModalType').value = 'รายรับ';
             $('txModalQty').value = 1; $('txModalAmount').value = ""; toggleTxModalType();
         }
         $('txModal').style.display = 'flex';
@@ -905,11 +917,128 @@
         } catch(e) { run("ROLLBACK;"); alert('❌ เกิดข้อผิดพลาด'); console.error(e); }
     }
 
-   function exportDatabase() { const txCount=q1("SELECT COUNT(*) AS c FROM transactions")?.c||0; const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([db.export()],{type:"application/octet-stream"})); a.download=`Backup_${new Date().toISOString().split('T')[0]}_(${txCount}).db`; a.click(); }
+   function exportDatabase() { const txCount=q1("SELECT COUNT(*) AS c FROM transactions")?.c||0; const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([db.export()],{type:"application/octet-stream"})); a.download=`Backup_${getLocalDate()}_(${txCount}).db`; a.click(); }
    function importDatabase() { const f=$('importFile').files[0]; if(!f) return; const r=new FileReader(); r.onload=function(){ initSqlJs({locateFile:fl=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${fl}`}).then(async SQL=>{ try{ db=new SQL.Database(new Uint8Array(this.result)); await saveToDevice(); filterProducts(); filterBuyProducts(); updateBrandButtons(); alert('📥 สำเร็จ!'); switchTab('sale-tab'); }catch(e){ alert('❌ ไฟล์ไม่ถูกต้อง'); }finally{ $('importFile').value=''; } }); }; r.readAsArrayBuffer(f); }
    async function resetDatabase() { if(confirm('⚠️ ลบข้อมูลทั้งหมด?\\nกด "ตกลง" เพื่อดาวน์โหลด Backup ก่อน')) return exportDatabase(), alert('📥 โหลดแล้ว กดรีเซ็ตอีกครั้งเพื่อลบ'); if(prompt('พิมพ์ "RESET" เพื่อยืนยัน:')==='RESET'){ try{ await idbReq('readwrite','delete'); alert('✅ รีเซ็ตแล้ว'); location.reload(); }catch(e){} } }
    if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
    function checkBackupCounter() { let count=parseInt(localStorage.getItem('txSaveCount')||'0'); count++; if(count>=5){ setTimeout(()=>{ if(confirm('📢 มีการบันทึกข้อมูลใหม่ครบ 5 รายการแล้ว! แนะนำให้ดาวน์โหลดไฟล์สำรอง (.db) เก็บไว้\\n\\nต้องการเซฟตอนนี้เลยไหม?')) exportDatabase(); localStorage.setItem('txSaveCount','0'); },500); } else localStorage.setItem('txSaveCount',count); }
+function runSystemSelfTest() {
+    const btn = document.activeElement;
+    const originalText = btn.textContent;
+    btn.textContent = "⏳ กำลังประมวลผล Test Cases...";
+    btn.disabled = true;
+
+    // โหลดคลังสคริปต์ SQL WASM อีกรอบเพื่อเปิด Instance ฐานข้อมูลจำลองชั่วคราว
+    initSqlJs({ locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${f}` }).then(async TestSQL => {
+        const realDb = db;
+        const realAlert = window.alert;
+        const realConfirm = window.confirm;
+        let testLogs = [];
+        let passCount = 0;
+
+        // ไฮแจ็คกล่องข้อความเตือนและปุ่มยืนยันเพื่อบังคับให้ระบบรันแบบอัตโนมัติไร้หน้าต่างรบกวน
+        window.confirm = () => true;
+        window.alert = (msg) => { testLogs.push(`[App Alert] ${msg}`); };
+
+        try {
+            // 1. สลับฐานข้อมูลหลักของแอปพลิเคชันไปเป็นตารางในความจำ (In-Memory Sandbox)
+            db = new TestSQL.Database();
+            
+            // Failsafe: สกัดกั้นฟังก์ชันห้ามเขียนทับข้อมูลดิบลง IndexedDB จริงของร้านค้าเด็ดขาด
+            db.export = () => { throw new Error("Sandbox Protection Enabled"); };
+
+            // สร้างโครงสร้างระบบฐานข้อมูลจำลอง
+            ['products (id INTEGER PRIMARY KEY AUTOINCREMENT, brand TEXT, model TEXT, jis TEXT, size_cat TEXT, stock INTEGER, cost REAL, price REAL)', 
+             'scrap_categories (id INTEGER PRIMARY KEY, size_name TEXT UNIQUE, default_discount REAL, stock INTEGER DEFAULT 0)', 
+             'transactions (id INTEGER PRIMARY KEY, date TEXT, type TEXT, model_name TEXT, qty INTEGER, total_amount REAL, net_profit REAL)']
+            .forEach(t => db.run(`CREATE TABLE ${t};`));
+
+            // เติมสารตั้งต้นจำลอง (สมมติว่าร้านมีแบตใหม่ 10 ลูก และยังไม่มีแบตเก่าเทิร์น)
+            db.run("INSERT INTO products VALUES (1, 'YUASA', 'TEST-MODEL', '95D31L', 'D31', 10, 2000, 3000)");
+            db.run("INSERT INTO scrap_categories VALUES (1, 'D31', 500, 0)");
+
+            const assert = (condition, message) => {
+                if (condition) { testLogs.push(`✅ ผ่าน: ${message}`); passCount++; }
+                else { throw new Error(`❌ ตกม้าตาย: ${message}`); }
+            };
+
+            // ==========================================================
+            // TEST CASE 1: ตรวจลอจิกการขายปกติ (ไม่มีการเทิร์นซากแบตเก่า)
+            // ==========================================================
+            $('saleProduct').value = "1";
+            $('saleQty').value = "2";
+            $('salePriceEach').value = "3000";
+            $('hasTradeIn').checked = false;
+            
+            processSale(); // สั่งรันฟังก์ชันขายจริงในโค้ดของคุณ
+
+            let case1Prod = q1("SELECT stock FROM products WHERE id=1");
+            assert(case1Prod.stock === 8, `ตัดคลังสินค้าแบตใหม่จาก 10 เหลือ ${case1Prod.stock} ลูก`);
+
+            let case1Tx = q1("SELECT total_amount, net_profit FROM transactions WHERE type='รายรับ'");
+            assert(case1Tx.total_amount === 6000, `คำนวณรายรับรวมบิลขายถูกต้อง (${case1Tx.total_amount} ฿)`);
+            assert(case1Tx.net_profit === 2000, `สมการคำนวณกำไรสุทธิหลังหักทุนถูกต้อง (${case1Tx.net_profit} ฿)`);
+
+            // ==========================================================
+            // TEST CASE 2: ตรวจลอจิกการขายพ่วงรับเทิร์นซาก (Dual-Transaction Logic)
+            // ==========================================================
+            $('saleProduct').value = "1";
+            $('saleQty').value = "1";
+            $('salePriceEach').value = "3000";
+            $('hasTradeIn').checked = true;
+            toggleTradeInSection(); // สั่งให้ DOM งอกแถวรับเทิร์นซากขึ้นมาบนหน้าจอ
+
+            const row = document.querySelector('#tradeInList .trade-in-row');
+            if (row) {
+                row.querySelector('.ti-size').value = "D31";
+                row.querySelector('.ti-qty').value = "1";
+                row.querySelector('.ti-discount').value = "500";
+            }
+
+            processSale(); // สั่งรันฟังก์ชันขายจริงรอบที่สอง
+
+            let case2Scrap = q1("SELECT stock FROM scrap_categories WHERE size_name='D31'");
+            assert(case2Scrap.stock === 1, `คลังแบตเตอรี่เก่าขนาด D31 ต้องเพิ่มสะสมเป็น ${case2Scrap.stock} ลูก`);
+
+            let case2TxExpense = q1("SELECT total_amount FROM transactions WHERE type='รายจ่าย' ORDER BY id DESC LIMIT 1");
+            assert(case2TxExpense.total_amount === 500, `บันทึกบัญชีแยกบรรทัดเป็นค่าใช้จ่ายรับซื้อซากสำเร็จ (${case2TxExpense.total_amount} ฿)`);
+
+            // ==========================================================
+            // TEST CASE 3: ตรวจสอบความถูกต้องของการลบประวัติย้อนหลัง (Rollback Integrity)
+            // ==========================================================
+            let lastSaleTx = q1("SELECT id FROM transactions WHERE type='รายรับ' ORDER BY id DESC LIMIT 1");
+            deleteTransaction(lastSaleTx.id); // สั่งลบประวัติการขายล่าสุดออก
+
+            let case3Prod = q1("SELECT stock FROM products WHERE id=1");
+            assert(case3Prod.stock === 8, `ระบบคืนค่าสต็อกแบตเตอรี่ใหม่กลับเข้าคลังถูกต้องหลังยกเลิกบิล`);
+
+            // แสดงรายงานผลลัพธ์ผ่านกล่องข้อความ
+            realAlert(`🎉 ผลการทดสอบเชิงลึก (In-App Test) ผ่านฉลุย 100%!\nผ่านการตรวจสอบย่อยทั้งหมด ${passCount} เงื่อนไข\n\n` + testLogs.join("\n"));
+
+        } catch (error) {
+            realAlert(`🚨 ตรวจพบจุดพังในระบบ (Regression Fault)!\n\nจุดที่พบปัญหา: ${error.message}`);
+            console.error(error);
+        } finally {
+            // 3. คืนค่าระบบสภาพแวดล้อมจริงกลับคืนสู่ตัวแอปพลิเคชันหลัก
+            db = realDb;
+            window.alert = realAlert;
+            window.confirm = realConfirm;
+            btn.textContent = originalText;
+            btn.disabled = false;
+
+            // ล้างค่าเศษซากที่ค้างอยู่ในช่องกรอกฟอร์มต่างๆ บน UI หน้าจอ
+            $('saleQty').value = 1;
+            $('saleSearchInput').value = '';
+            $('saleProduct').value = '';
+            $('hasTradeIn').checked = false;
+            $('tradeInList').innerHTML = '';
+            toggleTradeInSection();
+            
+            // รีเฟรชหน้าแดชบอร์ดจริงกลับมาแสดงผล
+            switchTab('sys-tab');
+        }
+    });
+}
 </script>
 </body>
 </html>
