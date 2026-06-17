@@ -1179,8 +1179,7 @@ function runSystemSelfTest() {
             realAlert(`🎉 ผลการทดสอบเชิงลึก (In-App Test) ผ่านฉลุย 100%!
 ผ่านการตรวจสอบย่อยทั้งหมด ${passCount} เงื่อนไข
 
-` + testLogs.join("
-"));
+` + testLogs.join(""));
 
         } catch (error) {
             realAlert(`🚨 ตรวจพบจุดพังในระบบ (Regression Fault)!
