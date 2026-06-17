@@ -440,11 +440,29 @@ const getLocalDate = () => new Date().toLocaleDateString('sv-SE');
     function selectProduct(id) { $('saleProduct').value=id; $$('#sale-tab .model-btn').forEach(b=>b.classList.toggle('active',b.dataset.id==id)); $('saleSearchInput').value=Object.keys(productMap).find(k=>productMap[k]===id)||''; updateSalePrice(); }
     function handleSearchInput(v) { const vl=v.toLowerCase(), id=productMap[v]||''; $('saleProduct').value=id; $$('#sale-tab .model-btn').forEach(b=>{ b.style.display=b.innerText.toLowerCase().includes(vl)?'flex':'none'; b.classList.toggle('active',b.dataset.id==id); }); updateSalePrice(); }
     
-    function updateSalePrice() {
-        const id=$('saleProduct').value;
-        $('salePriceEach').value=id?q1("SELECT price FROM products WHERE id=?",[id])?.price||0:0;
-        calculateTotal();
+function updateSalePrice() {
+    const id=$('saleProduct').value;
+    $('salePriceEach').value=id?q1("SELECT price FROM products WHERE id=?",[id])?.price||0:0;
+
+    // --- ส่วนที่เพิ่มเข้ามาใหม่ ---
+    // ตรวจสอบว่ามีการเลือกรุ่นแบตใหม่, เปิดสวิตช์รับเทิร์นอยู่ และมีรายการเทิร์นโผล่ขึ้นมาในจอแล้ว
+    if (id && $('hasTradeIn').checked && $('tradeInList').children.length > 0) {
+        const r = q1("SELECT size_cat FROM products WHERE id=?", [id]);
+        if (r) {
+            const firstRow = $('tradeInList').children[0]; // ชี้เป้าไปที่รายการแบตเทิร์นแถวแรก
+            const sel = firstRow.querySelector('.ti-size');
+            
+            // หากขนาดของแบตเทิร์นปัจจุบัน ไม่ตรงกับขนาดของแบตใหม่ ให้เปลี่ยนให้ตรงกัน
+            if (sel && sel.value !== r.size_cat) {
+                sel.value = r.size_cat;
+                updateRowScrapDiscount(sel); // ดึงราคาและส่วนลดของแบตไซส์นั้นมาอัปเดตให้ด้วย
+            }
+        }
     }
+    // -----------------------
+
+    calculateTotal();
+}
 
     function toggleTradeInSection() {
         let isChecked = $('hasTradeIn').checked;
