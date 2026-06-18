@@ -616,7 +616,7 @@ function updateSalePrice() {
     function addNewProduct() { const b=$('newBrand').value.trim(),m=$('newModel').value.trim(),j=$('newJIS').value.trim(); if(!b||!m||!j) return alert('กรอกข้อมูลไม่ครบ'); if(q1("SELECT id FROM products WHERE brand=? AND model=? AND jis=?",[b,m,j])) return alert('มีสินค้านี้แล้ว'); saveCurrentEditsToDB(); run("INSERT INTO products(brand,model,jis,size_cat,stock,cost,price) VALUES(?,?,?,?,?,?,?)",[b,m,j,$('newModelSize').value,parseInt($('newModelStock').value)||0,parseFloat($('newModelCost').value)||0,parseFloat($('newModelPrice').value)||0]); saveToDevice(); updateBrandButtons(); loadStockData(); filterProducts(); filterBuyProducts(); }
     function deleteProduct(id, n) { if(confirm(`⚠️ ลบ "${n}" ถาวร?`)){ saveCurrentEditsToDB(); run("DELETE FROM products WHERE id=?",[id]); saveToDevice(); updateBrandButtons(); loadStockData(); filterProducts(); filterBuyProducts(); } }
 
- function loadStockData() {
+function loadStockData() {
     if(!db) return; 
     let q = "SELECT id,brand,model,jis,size_cat,stock,cost,price FROM products WHERE 1=1";
     let p = [];
@@ -630,13 +630,21 @@ function updateSalePrice() {
     
     while(s.step()) {
         let [id,b,m,j,sz,st,c,pr] = s.get();
-        let fn=`${b} ${m} <span style="color:#3182ce;">(${j})</span>`, del=isEditingInventory?`<span style="cursor:pointer;margin-left:8px;padding:2px 6px;background:#f56565;color:white;border-radius:4px;font-size:12px" onclick="deleteProduct(${id},'${fn.replace(/'/g,"\'")}')">🗑️ ลบ</span>`:'';
-        h+=`<tr><td><strong>${fn}</strong> <span style="font-size:12px;color:#718096">(${sz})</span>${del}</td><td style="text-align:center;font-weight:bold;color:${!isEditingInventory&&st<=2?'#e53e3e':'#2d3748'}">${isEditingInventory?`<input type="number" class="edit-stock" data-id="${id}" value="${st}" style="width:100%;text-align:center;padding:4px;box-sizing:border-box">`:st}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-cost" data-id="${id}" value="${c}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${c.toLocaleString()} ฿`}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-price" data-id="${id}" value="${pr}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${pr.toLocaleString()} ฿`}</td></tr>`;
+        
+        // แยกข้อความที่จะนำไปใช้: fn (แสดงผลตาราง) และ plainName (ส่งให้หน้าต่างยืนยันการลบ)
+        let fn = `${b} ${m} <span style="color:#3182ce;">(${j})</span>`;
+        let plainName = `${b} ${m} (${j})`; 
+        
+        // ใช้ plainName กับปุ่มลบเพื่อป้องกันเครื่องหมาย " และ ' ตีกันจนโครงสร้าง HTML พัง
+        let del = isEditingInventory ? `<span style="cursor:pointer;margin-left:8px;padding:2px 6px;background:#f56565;color:white;border-radius:4px;font-size:12px" onclick="deleteProduct(${id}, '${plainName.replace(/'/g, "\\'").replace(/"/g, "&quot;")}')">🗑️ ลบ</span>` : '';
+        
+        h += `<tr><td><strong>${fn}</strong> <span style="font-size:12px;color:#718096">(${sz})</span>${del}</td><td style="text-align:center;font-weight:bold;color:${!isEditingInventory&&st<=2?'#e53e3e':'#2d3748'}">${isEditingInventory?`<input type="number" class="edit-stock" data-id="${id}" value="${st}" style="width:100%;text-align:center;padding:4px;box-sizing:border-box">`:st}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-cost" data-id="${id}" value="${c}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${c.toLocaleString()} ฿`}</td><td style="text-align:right">${isEditingInventory?`<input type="number" class="edit-price" data-id="${id}" value="${pr}" style="width:100%;text-align:right;padding:4px;box-sizing:border-box">`:`${pr.toLocaleString()} ฿`}</td></tr>`;
     }
     s.free();
     
-    if(isEditingInventory) h+=`<tr style="background:#ebf8ff"><td colspan="4"><div style="font-weight:bold;margin-bottom:6px;color:#2b6cb0">➕ เพิ่มรุ่นใหม่</div><div style="display:flex;gap:4px;margin-bottom:4px"><input type="text" id="newBrand" placeholder="ยี่ห้อ" style="flex:1.5;padding:6px;box-sizing:border-box"><input type="text" id="newModel" placeholder="รุ่น" style="flex:2;padding:6px;box-sizing:border-box"><input type="text" id="newJIS" placeholder="JIS" style="flex:2;padding:6px;box-sizing:border-box"></div><div style="display:flex;gap:4px"><select id="newModelSize" style="flex:1.5;padding:6px;box-sizing:border-box"><option>D31</option><option>LN4</option><option>D26</option><option>LN3</option><option>LN2</option><option>B24</option><option>B19</option><option>A19</option><option>N100</option><option>N120</option><option>N150</option></select><input type="number" id="newModelStock" placeholder="จำนวน" style="flex:1;padding:6px;text-align:center;box-sizing:border-box"><input type="number" id="newModelCost" placeholder="ทุน" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"><input type="number" id="newModelPrice" placeholder="ขาย" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"></div><button class="btn-quick-add" style="background:#3182ce;padding:10px;width:100%;margin-top:8px" onclick="addNewProduct()">➕ บันทึก</button></td></tr>`;
-    $('newStockTable').innerHTML=h;
+    if(isEditingInventory) h += `<tr style="background:#ebf8ff"><td colspan="4"><div style="font-weight:bold;margin-bottom:6px;color:#2b6cb0">➕ เพิ่มรุ่นใหม่</div><div style="display:flex;gap:4px;margin-bottom:4px"><input type="text" id="newBrand" placeholder="ยี่ห้อ" style="flex:1.5;padding:6px;box-sizing:border-box"><input type="text" id="newModel" placeholder="รุ่น" style="flex:2;padding:6px;box-sizing:border-box"><input type="text" id="newJIS" placeholder="JIS" style="flex:2;padding:6px;box-sizing:border-box"></div><div style="display:flex;gap:4px"><select id="newModelSize" style="flex:1.5;padding:6px;box-sizing:border-box"><option>D31</option><option>LN4</option><option>D26</option><option>LN3</option><option>LN2</option><option>B24</option><option>B19</option><option>A19</option><option>N100</option><option>N120</option><option>N150</option></select><input type="number" id="newModelStock" placeholder="จำนวน" style="flex:1;padding:6px;text-align:center;box-sizing:border-box"><input type="number" id="newModelCost" placeholder="ทุน" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"><input type="number" id="newModelPrice" placeholder="ขาย" style="flex:1.5;padding:6px;text-align:right;box-sizing:border-box"></div><button class="btn-quick-add" style="background:#3182ce;padding:10px;width:100%;margin-top:8px" onclick="addNewProduct()">➕ บันทึก</button></td></tr>`;
+    
+    $('newStockTable').innerHTML = h;
 }
 
     function handleScrapInventoryEditClick() { 
