@@ -91,7 +91,7 @@
     <div id="stock-tab" class="tab-content">
         <div class="card" style="overflow-x:auto"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:2px solid #edf2f7; padding-bottom:8px;">
                 <h2 style="margin:0; border:none; padding:0; color:#2b6cb0;">📦 รายการสต็อกแบตเตอรี่ใหม่</h2>
-                <button class="btn-quick-add" style="background:#107c41; padding:8px 12px; font-size:14px;" onclick="exportStockToExcel()">🟢 ส่งออกคลัง Excel</button>
+                <button class="btn-quick-add" style="background:#107c41; padding:8px 12px; font-size:14px;" onclick="exportStockToExcel()">🟢 Export Excel</button>
             </div>
             <div class="form-group" style="background:#edf2f7;padding:15px;border-radius:8px"><label>⚡ กรองตามขนาด:</label><div class="size-grid" id="invSizeGrid" style="margin-bottom:15px"><button class="size-btn active" data-size="ALL" onclick="filterInvSize('ALL')">ทั้งหมด</button><button class="size-btn" data-size="D31" onclick="filterInvSize('D31')">D31</button><button class="size-btn" data-size="LN4" onclick="filterInvSize('LN4')">LN4</button><button class="size-btn" data-size="D26" onclick="filterInvSize('D26')">D26</button><button class="size-btn" data-size="LN3" onclick="filterInvSize('LN3')">LN3</button><button class="size-btn" data-size="LN2" onclick="filterInvSize('LN2')">LN2</button><button class="size-btn" data-size="B24" onclick="filterInvSize('B24')">B24</button><button class="size-btn" data-size="B19" onclick="filterInvSize('B19')">B19</button><button class="size-btn" data-size="A19" onclick="filterInvSize('A19')">A19</button><button class="size-btn" data-size="N100" onclick="filterInvSize('N100')">N100</button><button class="size-btn" data-size="N120" onclick="filterInvSize('N120')">N120</button><button class="size-btn" data-size="N150" onclick="filterInvSize('N150')">N150</button></div><label style="margin-top:10px; display:block;">🏷️ กรองตามยี่ห้อ:</label><div class="size-grid" id="invBrandGrid"></div></div>
             <table id="newStockTable"></table><button id="editInvBtn" class="btn-primary" style="background:#4a5568;margin-top:20px" onclick="handleInventoryEditClick()">🔧 แก้ไขสต็อก ราคาทุน และราคาขาย</button>
@@ -104,7 +104,7 @@
             <table id="oldStockTable"></table>
             
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button id="editScrapBtn" class="btn-primary" style="background:#4a5568; flex:1;" onclick="handleScrapInventoryEditClick()">🔧 แก้ไขจำนวนราคาเทิร์น</button>
+                <button id="editScrapBtn" class="btn-primary" style="background:#4a5568; flex:1;" onclick="handleScrapInventoryEditClick()">🔧 แก้ไขจำนวนและราคาเทิร์น</button>
                 <button class="btn-primary" style="background:#38a169; flex:1;" onclick="openBuyScrapModal()">📥 ซื้อแบตเก่าอย่างเดียว</button>
                 <button class="btn-primary" style="background:#dd6b20; flex:1; box-shadow:0 2px 4px rgba(221,107,32,0.3);" onclick="openSellScrapModal()">💰 ขายแบตเก่าทั้งหมด</button>
             </div>
@@ -153,15 +153,15 @@
 
         <div class="summary-grid">
             <div class="stat-box bg-green">
-                <div>ยอดขายรวม (แบตใหม่)</div>
+                <div>รายรับ</div>
                 <div class="stat-val" id="repIncome">0 ฿</div>
             </div>
             <div class="stat-box bg-red">
-                <div>รายจ่ายรวม (ซื้อสต็อก + รับเทิร์น)</div>
+                <div>รายจ่าย</div>
                 <div class="stat-val" id="repExpense">-0 ฿</div>
             </div>
             <div class="stat-box bg-blue">
-                <div>กำไรสุทธิ (กระแสเงินสด)</div>
+                <div>กำไรสุทธิ</div>
                 <div class="stat-val" id="repProfit" style="font-size:36px; margin-top:10px;">0 ฿</div>
             </div>
         </div>
@@ -198,7 +198,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                 <h2 style="margin:0; border:none; padding:0;">📝 ประวัติการเดินบัญชี</h2>
                 <div style="display:flex; gap:8px;">
-                    <button class="btn-quick-add" style="background:#107c41; padding:8px 12px; font-size:14px;" onclick="exportTransactionsToExcel()">🟢 ส่งออกบัญชี Excel</button>
+                    <button class="btn-quick-add" style="background:#107c41; padding:8px 12px; font-size:14px;" onclick="exportTransactionsToExcel()">🟢 Export Excel</button>
                     <button class="btn-quick-add" style="background:#3182ce; padding:8px 12px; font-size:14px;" onclick="openTxModal()">➕ เพิ่มประวัติย้อนหลัง</button>
                 </div>
             </div>
@@ -612,7 +612,7 @@ function updateSalePrice() {
     }
 
     function saveCurrentEditsToDB() { run("BEGIN TRANSACTION;"); $$('.edit-stock').forEach(e=>run("UPDATE products SET stock=? WHERE id=?",[parseInt(e.value)||0,e.dataset.id])); $$('.edit-cost').forEach(e=>run("UPDATE products SET cost=? WHERE id=?",[parseFloat(e.value)||0,e.dataset.id])); $$('.edit-price').forEach(e=>run("UPDATE products SET price=? WHERE id=?",[parseFloat(e.value)||0,e.dataset.id])); run("COMMIT;"); }
-    function handleInventoryEditClick() { const b=$('editInvBtn'); if(!isEditingInventory){ isEditingInventory=true; b.textContent="💾 บันทึก"; b.style.background="#48bb78"; loadStockData(); } else { saveCurrentEditsToDB(); saveToDevice(); isEditingInventory=false; b.textContent="🔧 แก้ไขสต็อก/ราคา"; b.style.background="#4a5568"; loadStockData(); filterProducts(); filterBuyProducts(); } }
+    function handleInventoryEditClick() { const b=$('editInvBtn'); if(!isEditingInventory){ isEditingInventory=true; b.textContent="💾 บันทึก"; b.style.background="#48bb78"; loadStockData(); } else { saveCurrentEditsToDB(); saveToDevice(); isEditingInventory=false; b.textContent="🔧 แก้ไขสต็อก ราคาทุนและราคาขาย"; b.style.background="#4a5568"; loadStockData(); filterProducts(); filterBuyProducts(); } }
     function addNewProduct() { const b=$('newBrand').value.trim(),m=$('newModel').value.trim(),j=$('newJIS').value.trim(); if(!b||!m||!j) return alert('กรอกข้อมูลไม่ครบ'); if(q1("SELECT id FROM products WHERE brand=? AND model=? AND jis=?",[b,m,j])) return alert('มีสินค้านี้แล้ว'); saveCurrentEditsToDB(); run("INSERT INTO products(brand,model,jis,size_cat,stock,cost,price) VALUES(?,?,?,?,?,?,?)",[b,m,j,$('newModelSize').value,parseInt($('newModelStock').value)||0,parseFloat($('newModelCost').value)||0,parseFloat($('newModelPrice').value)||0]); saveToDevice(); updateBrandButtons(); loadStockData(); filterProducts(); filterBuyProducts(); }
     function deleteProduct(id, n) { if(confirm(`⚠️ ลบ "${n}" ถาวร?`)){ saveCurrentEditsToDB(); run("DELETE FROM products WHERE id=?",[id]); saveToDevice(); updateBrandButtons(); loadStockData(); filterProducts(); filterBuyProducts(); } }
 
@@ -841,8 +841,8 @@ function updateSalePrice() {
         });
         if(sortedNewSize.length === 0) nsh += `<tr><td colspan='2' style='text-align:center;color:#a0aec0;padding:15px;'>ไม่มีข้อมูลยอดขายแยกขนาด</td></tr>`;
         
-        nsh += `<tr style="background:#ebf8ff"><td style="text-align:right"><strong>รวมจำนวนทั้งหมด:</strong></td><td class="text-right" style="font-weight:bold; color:#2b6cb0; font-size:16px;">${sumNewSize} ลูก</td></tr>`;
-        nsh += `<tr style="background:#e6fffa; border-top:2px solid #319795;"><td style="text-align:right"><strong>🛒 กำไรเฉพาะส่วนแบตใหม่:</strong></td><td class="text-right" style="font-weight:bold; color:#234e52; font-size:16px;">+${totalPureProfit.toLocaleString()} ฿</td></tr>`;
+        nsh += `<tr style="background:#ebf8ff"><td style="text-align:right"><strong>รวม:</strong></td><td class="text-right" style="font-weight:bold; color:#2b6cb0; font-size:16px;">${sumNewSize} ลูก</td></tr>`;
+        nsh += `<tr style="background:#e6fffa; border-top:2px solid #319795;"><td style="text-align:right"><strong>🛒 กำไรแบตใหม่ทั้งหมด:</strong></td><td class="text-right" style="font-weight:bold; color:#234e52; font-size:16px;">+${totalPureProfit.toLocaleString()} ฿</td></tr>`;
         $('newSizeSummaryTable').innerHTML = nsh;
 
         // 3. ตารางแบตเก่า พร้อมรายจ่ายด้านล่าง
@@ -855,8 +855,8 @@ function updateSalePrice() {
         });
         if(sortedScrap.length === 0) sch += `<tr><td colspan='2' style='text-align:center;color:#a0aec0;padding:15px;'>ไม่มีข้อมูลการเทิร์นแบตเตอรี่</td></tr>`;
         
-        sch += `<tr style="background:#f0fff4"><td style="text-align:right"><strong>รวมจำนวนทั้งหมด:</strong></td><td class="text-right" style="font-weight:bold; color:#276749; font-size:16px;">${sumScrap} ลูก</td></tr>`;
-        sch += `<tr style="background:#fff5f5; border-top:2px solid #e53e3e;"><td style="text-align:right"><strong>🔄 จ่ายเงินซื้อแบตเก่าเข้าคลัง:</strong></td><td class="text-right" style="font-weight:bold; color:#c53030; font-size:16px;">-${totalScrapDiscount.toLocaleString()} ฿</td></tr>`;
+        sch += `<tr style="background:#f0fff4"><td style="text-align:right"><strong>รวม:</strong></td><td class="text-right" style="font-weight:bold; color:#276749; font-size:16px;">${sumScrap} ลูก</td></tr>`;
+        sch += `<tr style="background:#fff5f5; border-top:2px solid #e53e3e;"><td style="text-align:right"><strong>🔄 ส่วนลดแบตเทิร์นทั้งหมด:</strong></td><td class="text-right" style="font-weight:bold; color:#c53030; font-size:16px;">-${totalScrapDiscount.toLocaleString()} ฿</td></tr>`;
         $('scrapSummaryTable').innerHTML = sch;
     }
 
